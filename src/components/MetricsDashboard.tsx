@@ -1,4 +1,5 @@
 import MetricCard from "./MetricCard";
+import { useCountUp } from "../hooks/useCountUp";
 
 interface Metrics {
   totalDistance?: string;
@@ -12,16 +13,61 @@ interface MetricsDashboardProps {
   metrics?: Metrics;
 }
 
+function AnimatedMetricCard({
+  targetValue,
+  label,
+  color,
+  image,
+  suffix = "",
+}: {
+  targetValue: number;
+  label: string;
+  color: "green" | "blue" | "purple" | "red" | "brown";
+  image?: string;
+  suffix?: string;
+}) {
+  const { count } = useCountUp(targetValue, { duration: 2000 });
+  const formattedValue = count.toLocaleString() + suffix;
+
+  return (
+    <MetricCard
+      value={formattedValue}
+      label={label}
+      color={color}
+      image={image}
+    />
+  );
+}
+
 export default function MetricsDashboard({ metrics }: MetricsDashboardProps) {
   const defaultMetrics: Metrics = {
     totalDistance: "1,482 km",
     gymSessions: 312,
-    activeMembers: 487,
+    activeMembers: 1687,
     calorieTargetHits: 234,
     membersWhoFasted: 189,
   };
 
   const displayMetrics = metrics || defaultMetrics;
+
+  const extractNumber = (
+    value: string | number | undefined,
+    fallback: number
+  ): number => {
+    if (typeof value === "number") return value;
+    if (typeof value === "string") {
+      const num = parseFloat(value.replace(/[^\d.]/g, ""));
+      return isNaN(num) ? fallback : num;
+    }
+    return fallback;
+  };
+
+  const extractSuffix = (value: string | number | undefined): string => {
+    if (typeof value === "string" && value.includes("km")) {
+      return " km";
+    }
+    return "";
+  };
 
   return (
     <section className="bg-gradient-to-br from-gray-50 to-kulayellow/20 py-20 sm:py-24 relative overflow-hidden">
@@ -45,32 +91,33 @@ export default function MetricsDashboard({ metrics }: MetricsDashboardProps) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          <MetricCard
-            value={displayMetrics.totalDistance || "1,482 km"}
+          <AnimatedMetricCard
+            targetValue={extractNumber(displayMetrics.totalDistance, 1482)}
+            suffix={extractSuffix(displayMetrics.totalDistance)}
             label="Total Distance Walked"
             color="green"
             image="/images/health-metrics.jpg"
           />
-          <MetricCard
-            value={`${displayMetrics.gymSessions || 312}`}
+          <AnimatedMetricCard
+            targetValue={displayMetrics.gymSessions || 312}
             label="Gym Sessions"
             color="purple"
             image="/images/gym-pic.jpg"
           />
-          <MetricCard
-            value={`${displayMetrics.activeMembers || 487}`}
+          <AnimatedMetricCard
+            targetValue={displayMetrics.activeMembers || 487}
             label="Active Members"
             color="red"
             image="/images/group-exercise.jpg"
           />
-          <MetricCard
-            value={`${displayMetrics.calorieTargetHits || 234}`}
+          <AnimatedMetricCard
+            targetValue={displayMetrics.calorieTargetHits || 234}
             label="Members Hit Calorie Target"
             color="brown"
             image="/images/dan-gold-unsplash.jpg"
           />
-          <MetricCard
-            value={`${displayMetrics.membersWhoFasted || 189}`}
+          <AnimatedMetricCard
+            targetValue={displayMetrics.membersWhoFasted || 189}
             label="Members Who Fasted"
             color="blue"
             image="/images/afere-afang.jpg"

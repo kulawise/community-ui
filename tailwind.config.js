@@ -13,9 +13,9 @@ export default {
         kulared: "#b2403e",
       },
       boxShadow: {
-        brutal: "8px 8px 0px 0px rgba(0, 0, 0, 1)",
-        "brutal-sm": "4px 4px 0px 0px rgba(0, 0, 0, 1)",
-        "brutal-lg": "12px 12px 0px 0px rgba(0, 0, 0, 1)",
+        brutal: "2px 2px 0px 0px rgba(0, 0, 0, 1)",
+        "brutal-sm": "1px 1px 0px 0px rgba(0, 0, 0, 1)",
+        "brutal-lg": "3px 3px 0px 0px rgba(0, 0, 0, 1)",
       },
     },
   },

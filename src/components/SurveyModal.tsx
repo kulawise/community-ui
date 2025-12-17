@@ -20,9 +20,11 @@ const goalFactors = [
   "more cardio",
   "healthier diet",
   "fasting",
-  "meal recommendations",
+  "figuring out what to eat",
+  "ideas on how to combine your meals",
   "pantry management",
   "get ideas for your shopping list",
+  "staying consistent with friends",
 ];
 
 export default function SurveyModal({
@@ -35,9 +37,44 @@ export default function SurveyModal({
     email: "",
     healthGoal: "",
     selectedFactors: [] as string[],
-    otherFactor: "",
-    additionalThoughts: "",
+    anythingElse: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const validateForm = (): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!emailRegex.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    if (!formData.healthGoal) {
+      newErrors.healthGoal = "Please select a health goal";
+    }
+
+    if (formData.selectedFactors.length === 0) {
+      newErrors.selectedFactors = "Please select at least one factor";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const GOOGLE_SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
+
+  if (!GOOGLE_SCRIPT_URL) {
+    throw new Error("VITE_GOOGLE_SCRIPT_URL environment variable is required");
+  }
 
   const handleFactorToggle = (factor: string) => {
     setFormData((prev) => ({
@@ -48,9 +85,32 @@ export default function SurveyModal({
     }));
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    window.location.href = telegramLink;
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setIsSubmitted(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -119,155 +179,202 @@ export default function SurveyModal({
           Answer a few quick questions and get your community invite link.
         </p>
 
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-6 flex-1 overflow-y-auto pr-2"
-        >
-          <div>
-            <label
-              htmlFor="name"
-              className="block text-sm font-bold text-gray-900 mb-2 uppercase tracking-wide"
-            >
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-              className="w-full px-4 py-3 border-4 border-black focus:border-kulagreen focus:ring-4 focus:ring-kulayellow transition-all font-medium"
-              placeholder="Your name"
-              required
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-bold text-gray-900 mb-2 uppercase tracking-wide"
-            >
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-              className="w-full px-4 py-3 border-4 border-black focus:border-kulagreen focus:ring-4 focus:ring-kulayellow transition-all font-medium"
-              placeholder="your@email.com"
-              required
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="healthGoal"
-              className="block text-sm font-bold text-gray-900 mb-2 uppercase tracking-wide"
-            >
-              What is your health goal?
-            </label>
-            <select
-              id="healthGoal"
-              value={formData.healthGoal}
-              onChange={(e) =>
-                setFormData({ ...formData, healthGoal: e.target.value })
-              }
-              className="w-full px-4 py-3 border-4 border-black focus:border-kulagreen focus:ring-4 focus:ring-kulayellow transition-all font-medium bg-white"
-              required
-            >
-              <option value="">Select a goal...</option>
-              {healthGoals.map((goal) => (
-                <option key={goal} value={goal}>
-                  {goal}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-bold text-gray-900 mb-3 uppercase tracking-wide">
-              What do you think matters to help you reach your goals?
-            </label>
-            <p className="text-xs text-gray-600 mb-3 italic">
-              Select as many as apply. You can also suggest more below.
-            </p>
-            <div className="space-y-2">
-              {goalFactors.map((factor) => (
-                <label
-                  key={factor}
-                  className="flex items-center gap-3 p-3 border-2 border-gray-300 hover:border-kulagreen hover:bg-kulagreen/5 transition-all cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    checked={formData.selectedFactors.includes(factor)}
-                    onChange={() => handleFactorToggle(factor)}
-                    className="w-5 h-5 border-2 border-black text-kulagreen focus:ring-2 focus:ring-kulayellow cursor-pointer"
-                  />
-                  <span className="font-medium text-gray-900 capitalize">
-                    {factor}
-                  </span>
-                </label>
-              ))}
+        {isSubmitted ? (
+          <div className="flex flex-col items-center justify-center py-8 space-y-6">
+            <div className="text-center">
+              {/* <div className="text-4xl mb-4">✅</div> */}
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                Thank you for taking the survey!
+              </h3>
+              <p className="text-gray-700 mb-6">
+                Your response has been recorded. Join our Telegram community to
+                get started!
+              </p>
             </div>
-            <div className="mt-3">
+            <a
+              href={telegramLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-kulagreen text-white font-bold px-8 py-4 rounded-sm shadow-brutal hover:shadow-brutal-sm hover:translate-x-1 hover:translate-y-1 transition-all duration-150 text-lg border-4 border-black"
+            >
+              Join the Telegram community
+            </a>
+            <button
+              onClick={onClose}
+              className="text-gray-600 hover:text-gray-900 font-medium underline"
+            >
+              Close
+            </button>
+          </div>
+        ) : (
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-6 flex-1 overflow-y-auto pr-2"
+          >
+            <div>
               <label
-                htmlFor="otherFactor"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                htmlFor="name"
+                className="block text-sm font-bold text-gray-900 mb-2 uppercase tracking-wide"
               >
-                Suggest more:
+                Name
               </label>
               <input
                 type="text"
-                id="otherFactor"
-                value={formData.otherFactor}
+                id="name"
+                value={formData.name}
+                onChange={(e) => {
+                  setFormData({ ...formData, name: e.target.value });
+                  if (errors.name) setErrors({ ...errors, name: "" });
+                }}
+                className={`w-full px-4 py-3 border-4 ${
+                  errors.name ? "border-red-500" : "border-black"
+                } focus:border-kulagreen focus:ring-4 focus:ring-kulayellow transition-all font-medium`}
+                placeholder="Your name"
+                required
+              />
+              {errors.name && (
+                <p className="text-red-600 text-sm mt-1">{errors.name}</p>
+              )}
+            </div>
+
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-bold text-gray-900 mb-2 uppercase tracking-wide"
+              >
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                value={formData.email}
+                onChange={(e) => {
+                  setFormData({ ...formData, email: e.target.value });
+                  if (errors.email) setErrors({ ...errors, email: "" });
+                }}
+                className={`w-full px-4 py-3 border-4 ${
+                  errors.email ? "border-red-500" : "border-black"
+                } focus:border-kulagreen focus:ring-4 focus:ring-kulayellow transition-all font-medium`}
+                placeholder="your@email.com"
+                required
+              />
+              {errors.email && (
+                <p className="text-red-600 text-sm mt-1">{errors.email}</p>
+              )}
+            </div>
+
+            <div>
+              <label
+                htmlFor="healthGoal"
+                className="block text-sm font-bold text-gray-900 mb-2 uppercase tracking-wide"
+              >
+                What is your health goal?
+              </label>
+              <select
+                id="healthGoal"
+                value={formData.healthGoal}
+                onChange={(e) => {
+                  setFormData({ ...formData, healthGoal: e.target.value });
+                  if (errors.healthGoal)
+                    setErrors({ ...errors, healthGoal: "" });
+                }}
+                className={`w-full px-4 py-3 border-4 ${
+                  errors.healthGoal ? "border-red-500" : "border-black"
+                } focus:border-kulagreen focus:ring-4 focus:ring-kulayellow transition-all font-medium bg-white`}
+                required
+              >
+                <option value="">Select a goal...</option>
+                {healthGoals.map((goal) => (
+                  <option key={goal} value={goal}>
+                    {goal}
+                  </option>
+                ))}
+              </select>
+              {errors.healthGoal && (
+                <p className="text-red-600 text-sm mt-1">{errors.healthGoal}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-bold text-gray-900 mb-3 uppercase tracking-wide">
+                What do you think matters to help you reach your goals?
+              </label>
+              <p className="text-xs text-gray-600 mb-3 italic">
+                Select as many as apply.
+              </p>
+              <div className="space-y-2">
+                {goalFactors.map((factor) => (
+                  <label
+                    key={factor}
+                    className="flex items-center gap-3 p-3 border-2 border-gray-300 hover:border-kulagreen hover:bg-kulagreen/5 transition-all cursor-pointer"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={formData.selectedFactors.includes(factor)}
+                      onChange={() => {
+                        handleFactorToggle(factor);
+                        if (errors.selectedFactors) {
+                          setErrors({ ...errors, selectedFactors: "" });
+                        }
+                      }}
+                      className="w-5 h-5 border-2 border-black text-kulagreen focus:ring-2 focus:ring-kulayellow cursor-pointer"
+                    />
+                    <span className="font-medium text-gray-900 capitalize">
+                      {factor}
+                    </span>
+                  </label>
+                ))}
+              </div>
+              {errors.selectedFactors && (
+                <p className="text-red-600 text-sm mt-2">
+                  {errors.selectedFactors}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <label
+                htmlFor="anythingElse"
+                className="block text-sm font-bold text-gray-900 mb-2 uppercase tracking-wide"
+              >
+                Anything else?
+              </label>
+              <input
+                type="text"
+                id="anythingElse"
+                value={formData.anythingElse}
                 onChange={(e) =>
-                  setFormData({ ...formData, otherFactor: e.target.value })
+                  setFormData({ ...formData, anythingElse: e.target.value })
                 }
-                className="w-full px-4 py-2 border-2 border-gray-300 border-dashed focus:border-kulagreen focus:ring-2 focus:ring-kulayellow transition-all font-medium"
-                placeholder="Add your suggestion..."
+                className="w-full px-4 py-3 border-4 border-black focus:border-kulagreen focus:ring-4 focus:ring-kulayellow transition-all font-medium"
+                placeholder="Add anything else..."
               />
             </div>
-          </div>
 
-          <div>
-            <label
-              htmlFor="additionalThoughts"
-              className="block text-sm font-bold text-gray-900 mb-2 uppercase tracking-wide"
-            >
-              Anything else you think matters healthwise?
-            </label>
-            <textarea
-              id="additionalThoughts"
-              value={formData.additionalThoughts}
-              onChange={(e) =>
-                setFormData({ ...formData, additionalThoughts: e.target.value })
-              }
-              className="w-full px-4 py-3 border-4 border-black focus:border-kulagreen focus:ring-4 focus:ring-kulayellow transition-all font-medium resize-none"
-              placeholder="Share your thoughts..."
-              rows={4}
-            />
-          </div>
-
-          <div className="flex gap-3 pt-4 flex-shrink-0 sticky bottom-0 bg-white pb-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 px-4 py-3 border-4 border-black bg-white text-gray-900 font-bold hover:bg-gray-100 hover:translate-x-1 hover:translate-y-1 shadow-brutal-sm hover:shadow-none transition-all"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="flex-1 bg-kulagreen text-white font-bold px-4 py-3 border-4 border-black hover:bg-kulagreen-dark hover:translate-x-1 hover:translate-y-1 shadow-brutal-sm hover:shadow-none transition-all"
-            >
-              Submit & Join
-            </button>
-          </div>
-        </form>
+            <div className="flex gap-3 pt-4 flex-shrink-0 sticky bottom-0 bg-white pb-2">
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex-1 px-4 py-3 border-4 border-black bg-white text-gray-900 font-bold hover:bg-gray-100 hover:translate-x-1 hover:translate-y-1 shadow-brutal-sm hover:shadow-none transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={
+                  isSubmitting ||
+                  !formData.name.trim() ||
+                  !formData.email.trim() ||
+                  !formData.healthGoal ||
+                  formData.selectedFactors.length === 0
+                }
+                className="flex-1 bg-kulagreen text-white font-bold px-4 py-3 border-4 border-black hover:bg-kulagreen-dark hover:translate-x-1 hover:translate-y-1 shadow-brutal-sm hover:shadow-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? "Submitting..." : "Submit & Join"}
+              </button>
+            </div>
+          </form>
+        )}
       </div>
     </div>
   );

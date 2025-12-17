@@ -1,73 +1,74 @@
-import MetricCard from "./MetricCard";
-import { useCountUp } from "../hooks/useCountUp";
+import CountdownTimer from "./CountdownTimer";
+// import MetricCard from "./MetricCard";
+// import { useCountUp } from "../hooks/useCountUp";
 
-interface Metrics {
-  totalDistance?: string;
-  gymSessions?: number;
-  activeMembers?: number;
-  calorieTargetHits?: number;
-  membersWhoFasted?: number;
-}
+// interface Metrics {
+//   totalDistance?: string;
+//   gymSessions?: number;
+//   activeMembers?: number;
+//   calorieTargetHits?: number;
+//   membersWhoFasted?: number;
+// }
 
-interface MetricsDashboardProps {
-  metrics?: Metrics;
-}
+// interface MetricsDashboardProps {
+//   metrics?: Metrics;
+// }
 
-function AnimatedMetricCard({
-  targetValue,
-  label,
-  color,
-  image,
-  suffix = "",
-}: {
-  targetValue: number;
-  label: string;
-  color: "green" | "blue" | "purple" | "red" | "brown";
-  image?: string;
-  suffix?: string;
-}) {
-  const { count } = useCountUp(targetValue, { duration: 2000 });
-  const formattedValue = count.toLocaleString() + suffix;
+// function AnimatedMetricCard({
+//   targetValue,
+//   label,
+//   color,
+//   image,
+//   suffix = "",
+// }: {
+//   targetValue: number;
+//   label: string;
+//   color: "green" | "blue" | "purple" | "red" | "brown";
+//   image?: string;
+//   suffix?: string;
+// }) {
+//   const { count } = useCountUp(targetValue, { duration: 2000 });
+//   const formattedValue = count.toLocaleString() + suffix;
 
-  return (
-    <MetricCard
-      value={formattedValue}
-      label={label}
-      color={color}
-      image={image}
-    />
-  );
-}
+//   return (
+//     <MetricCard
+//       value={formattedValue}
+//       label={label}
+//       color={color}
+//       image={image}
+//     />
+//   );
+// }
 
-export default function MetricsDashboard({ metrics }: MetricsDashboardProps) {
-  const defaultMetrics: Metrics = {
-    totalDistance: "1,482 km",
-    gymSessions: 312,
-    activeMembers: 1687,
-    calorieTargetHits: 234,
-    membersWhoFasted: 189,
-  };
+export default function MetricsDashboard() {
+  // const defaultMetrics: Metrics = {
+  //   totalDistance: "1,482 km",
+  //   gymSessions: 312,
+  //   activeMembers: 1687,
+  //   calorieTargetHits: 234,
+  //   membersWhoFasted: 189,
+  // };
 
-  const displayMetrics = metrics || defaultMetrics;
+  // const displayMetrics = metrics || defaultMetrics;
 
-  const extractNumber = (
-    value: string | number | undefined,
-    fallback: number
-  ): number => {
-    if (typeof value === "number") return value;
-    if (typeof value === "string") {
-      const num = parseFloat(value.replace(/[^\d.]/g, ""));
-      return isNaN(num) ? fallback : num;
-    }
-    return fallback;
-  };
+  // const extractNumber = (
+  //   value: string | number | undefined,
+  //   fallback: number
+  // ): number => {
+  //   if (typeof value === "number") return value;
+  //   if (typeof value === "string") {
+  //     const num = parseFloat(value.replace(/[^\d.]/g, ""));
+  //     return isNaN(num) ? fallback : num;
+  //   }
+  //   return fallback;
+  // };
 
-  const extractSuffix = (value: string | number | undefined): string => {
-    if (typeof value === "string" && value.includes("km")) {
-      return " km";
-    }
-    return "";
-  };
+  // const extractSuffix = (value: string | number | undefined): string => {
+  //   if (typeof value === "string" && value.includes("km")) {
+  //     return " km";
+  //   }
+  //   return "";
+  // };
 
   return (
     <section className="bg-gradient-to-br from-gray-50 to-kulayellow/20 py-20 sm:py-24 relative overflow-hidden">
@@ -75,22 +76,31 @@ export default function MetricsDashboard({ metrics }: MetricsDashboardProps) {
       <div className="absolute bottom-10 left-10 w-24 h-24 bg-kulapurple/20 border-4 border-black -rotate-12"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-4">
-            Community Impact
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-6">
+            Join the Kulawise, Health & Fitness Community for 2026
           </h2>
-          <div className="mb-4">
-            <span className="inline-block bg-kulagreen text-white font-bold px-6 py-2 rounded-sm border-4 border-black shadow-brutal-sm text-base md:text-lg">
-              Today's Metrics
-            </span>
-          </div>
-          <p className="text-lg md:text-xl text-gray-700 max-w-2xl mx-auto">
-            Together, we're building healthier habits and achieving amazing
-            milestones
+          <p className="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto mb-8">
+            We're building a community to help you achieve your health and
+            fitness goals for 2026. Join us on this journey to better health,
+            stronger habits, and a supportive network of people committed to
+            living their best lives.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <div className="mb-12">
+          <div className="text-center mb-6">
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+              Launching January 15, 2026
+            </h3>
+            <p className="text-base md:text-lg text-gray-600">
+              Countdown to launch
+            </p>
+          </div>
+          <CountdownTimer />
+        </div>
+
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           <AnimatedMetricCard
             targetValue={extractNumber(displayMetrics.totalDistance, 1482)}
             suffix={extractSuffix(displayMetrics.totalDistance)}
@@ -122,7 +132,7 @@ export default function MetricsDashboard({ metrics }: MetricsDashboardProps) {
             color="blue"
             image="/images/afere-afang.jpg"
           />
-        </div>
+        </div> */}
 
         <div className="mt-16 text-center">
           <div className="inline-block bg-white border-4 border-black shadow-brutal-sm px-8 py-4">

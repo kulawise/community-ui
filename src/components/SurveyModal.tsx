@@ -148,36 +148,40 @@ export default function SurveyModal({
         className="bg-white border-4 border-black shadow-brutal-lg max-w-2xl w-full p-6 sm:p-8 relative max-h-[90vh] overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="absolute top-0 right-0 w-12 h-12 bg-kulayellow border-b-4 border-l-4 border-black"></div>
+        {!isSubmitted && (
+          <>
+            <div className="absolute top-0 right-0 w-12 h-12 bg-kulayellow border-b-4 border-l-4 border-black"></div>
 
-        <div className="flex justify-between items-center mb-6 flex-shrink-0">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900">
-            Take a simple survey to join
-          </h2>
-          <button
-            onClick={onClose}
-            className="text-gray-600 hover:text-gray-900 transition-colors border-2 border-black hover:bg-kulayellow p-1 rounded-sm"
-            aria-label="Close modal"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={3}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        </div>
+            <div className="flex justify-between items-center mb-6 flex-shrink-0">
+              <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900">
+                Take a simple survey to join
+              </h2>
+              <button
+                onClick={onClose}
+                className="text-gray-600 hover:text-gray-900 transition-colors border-2 border-black hover:bg-kulayellow p-1 rounded-sm"
+                aria-label="Close modal"
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={3}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
 
-        <p className="text-gray-700 mb-6 font-medium flex-shrink-0">
-          Answer a few quick questions and get your community invite link.
-        </p>
+            <p className="text-gray-700 mb-6 font-medium flex-shrink-0">
+              Answer a few quick questions and get your community invite link.
+            </p>
+          </>
+        )}
 
         {isSubmitted ? (
           <div className="flex flex-col items-center justify-center py-8 space-y-6">

@@ -46,9 +46,16 @@ const BINGO_QUESTIONS = [
   "Quit unhealthy habits",
 ];
 
-const UNHEALTHY_HABITS = new Set([12, 13, 21, 24]);
+const UNHEALTHY_HABITS_MINUS_3 = new Set([12, 24]); // Ate junk food, Felt stressed
+const UNHEALTHY_HABITS_MINUS_5 = new Set([13, 17, 21]); // Late-night meals, Gained weight, Alcohol periods
+const BONUS_HABITS = new Set([8, 28, 33, 34]); // Took stairs, Tracked calories, New fitness friend, Fitness app sub
 
-const HEALTHY_HABITS_COUNT = BINGO_QUESTIONS.length - UNHEALTHY_HABITS.size;
+const UNHEALTHY_HABITS = new Set([
+  ...UNHEALTHY_HABITS_MINUS_3,
+  ...UNHEALTHY_HABITS_MINUS_5,
+]);
+const HEALTHY_HABITS_COUNT =
+  BINGO_QUESTIONS.length - UNHEALTHY_HABITS.size - BONUS_HABITS.size;
 
 const SCORE_MESSAGES: { range: [number, number]; message: string }[] = [
   { range: [0, 5], message: "Room for Growth" },
@@ -78,19 +85,27 @@ function calculateScore(checkedItems: Set<number>): {
   message: string;
 } {
   let healthyChecked = 0;
-  let unhealthyChecked = 0;
+  let unhealthyPenaltyMinus3 = 0;
+  let unhealthyPenaltyMinus5 = 0;
+  let bonusPoints = 0;
 
   checkedItems.forEach((index) => {
-    if (UNHEALTHY_HABITS.has(index)) {
-      unhealthyChecked++;
+    if (UNHEALTHY_HABITS_MINUS_3.has(index)) {
+      unhealthyPenaltyMinus3++;
+    } else if (UNHEALTHY_HABITS_MINUS_5.has(index)) {
+      unhealthyPenaltyMinus5++;
+    } else if (BONUS_HABITS.has(index)) {
+      bonusPoints++;
     } else {
       healthyChecked++;
     }
   });
 
   const healthyScore = (healthyChecked / HEALTHY_HABITS_COUNT) * 100;
-  const unhealthyPenalty = unhealthyChecked * 5;
-  const totalScore = healthyScore - unhealthyPenalty;
+  const unhealthyPenalty =
+    unhealthyPenaltyMinus3 * 3 + unhealthyPenaltyMinus5 * 5;
+  const bonusScore = bonusPoints * 2;
+  const totalScore = healthyScore - unhealthyPenalty + bonusScore;
 
   const finalScore = Math.max(0, Math.min(100, Math.round(totalScore)));
 

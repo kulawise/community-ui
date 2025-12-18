@@ -52,11 +52,19 @@ export default function BingoChecklist({
   const [checkedItems, setCheckedItems] = useState<Set<number>>(initialChecked);
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  const WEIGHT_INDICES = [16, 17, 18]; // Lost weight, Gained weight, Maintained weight
+
   const toggleItem = (index: number) => {
     const newChecked = new Set(checkedItems);
+
     if (newChecked.has(index)) {
       newChecked.delete(index);
     } else {
+      if (WEIGHT_INDICES.includes(index)) {
+        WEIGHT_INDICES.forEach((weightIndex) => {
+          newChecked.delete(weightIndex);
+        });
+      }
       newChecked.add(index);
     }
     setCheckedItems(newChecked);

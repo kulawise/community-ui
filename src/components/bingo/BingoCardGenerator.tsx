@@ -262,17 +262,15 @@ export default function BingoCardGenerator({
               style={{ position: "relative", zIndex: 2 }}
             >
               <div className="flex flex-col">
-                <div className="text-left mb-2">
-                  <div className="flex items-center gap-2 mb-3">
-                    <img
-                      src="/kulawise-logo.png"
-                      alt="Kulawise"
-                      className="h-6 w-auto"
-                    />
-                    <h1 className="text-lg font-extrabold text-white">
-                      My 2025 Health Bingo
-                    </h1>
-                  </div>
+                <div className="flex justify-between items-start mb-2">
+                  <h1 className="text-lg font-extrabold text-white">
+                    My 2025 Health Bingo
+                  </h1>
+                  <img
+                    src="/kulawise-logo.png"
+                    alt="Kulawise"
+                    className="h-6 w-auto"
+                  />
                 </div>
 
                 <div className="flex items-center gap-3 mb-5">

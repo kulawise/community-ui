@@ -72,29 +72,30 @@ export default function MetricsDashboard() {
 
   return (
     <section className="bg-gradient-to-br from-gray-50 to-kulayellow/20 py-20 sm:py-24 relative overflow-hidden">
-      <div className="absolute top-10 right-10 w-32 h-32 bg-kulagreen/20 border-4 border-black rotate-12"></div>
-      <div className="absolute bottom-10 left-10 w-24 h-24 bg-kulapurple/20 border-4 border-black -rotate-12"></div>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-6">
             Join the Kulawise, Health & Fitness Community for 2026
           </h2>
-          <p className="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto mb-8">
-            We're building a community to help you achieve your health and
-            fitness goals for 2026. Join us on this journey to better health,
-            stronger habits, and a supportive network of people committed to
-            living their best lives.
-          </p>
+          {/* <p className="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto mb-8">
+            As we prepare for 2026, many people are setting health and fitness
+            goals — more gym check-ins, healthier meals, better portion control,
+            and consistency.
+            <br />
+            <br />
+            But these goals are hard to achieve alone. Real progress comes from
+            accountability, and accountability is easier when you're part of a
+            community working toward the same goal: staying healthy.
+          </p> */}
         </div>
 
         <div className="mb-12">
           <div className="text-center mb-6">
             <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-              Launching January 15, 2026
+              The community kicks off on January 15, 2026
             </h3>
             <p className="text-base md:text-lg text-gray-600">
-              Countdown to launch
+              Countdown to kickoff
             </p>
           </div>
           <CountdownTimer />

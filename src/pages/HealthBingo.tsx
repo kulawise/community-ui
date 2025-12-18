@@ -71,13 +71,13 @@ export default function HealthBingo() {
     <div className="min-h-screen bg-white relative">
       <button
         onClick={toggleMusic}
-        className="fixed top-4 right-4 z-50 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full border-2 border-white shadow-brutal-sm transition-all duration-150"
+        className="fixed top-4 right-4 z-50 bg-black/50 hover:bg-black/70 text-white p-2 sm:p-3 rounded-full border-2 border-white shadow-brutal-sm transition-all duration-150"
         aria-label={isPlaying ? "Pause music" : "Play music"}
       >
         {isPlaying ? (
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
+            className="h-4 w-4 sm:h-6 sm:w-6"
             fill="currentColor"
             viewBox="0 0 24 24"
           >
@@ -86,7 +86,7 @@ export default function HealthBingo() {
         ) : (
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
+            className="h-4 w-4 sm:h-6 sm:w-6"
             fill="currentColor"
             viewBox="0 0 24 24"
           >

@@ -85,7 +85,7 @@ export default function BingoChecklist({
   const progress = ((currentIndex + 1) / BINGO_QUESTIONS.length) * 100;
 
   return (
-    <section className="min-h-screen py-6 sm:py-12 px-4 bg-white">
+    <section className="min-h-screen py-6 sm:py-12 px-4 bg-white pt-20 sm:pt-6">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-6 sm:mb-8">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mb-3 sm:mb-4">
@@ -179,7 +179,7 @@ export default function BingoChecklist({
             disabled={checkedItems.size < 5}
             className="bg-kulapurple text-white font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-sm shadow-brutal hover:shadow-brutal-sm active:translate-x-1 active:translate-y-1 transition-all duration-150 text-base sm:text-lg border-4 border-black w-full sm:w-auto touch-manipulation disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Continue to Photo Upload
+            Finish
           </button>
         </div>
       </div>

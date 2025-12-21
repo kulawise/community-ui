@@ -1,13 +1,14 @@
 import { useState, useEffect, useRef } from "react";
+import EmailCollection from "../components/bingo/EmailCollection";
 import BingoIntro from "../components/bingo/BingoIntro";
 import BingoChecklist from "../components/bingo/BingoChecklist";
 import PhotoUpload from "../components/bingo/PhotoUpload";
 import BingoCardGenerator from "../components/bingo/BingoCardGenerator";
 
-type BingoStep = "intro" | "checklist" | "photo" | "card";
+type BingoStep = "email" | "intro" | "checklist" | "photo" | "card";
 
 export default function HealthBingo() {
-  const [step, setStep] = useState<BingoStep>("intro");
+  const [step, setStep] = useState<BingoStep>("email");
   const [checkedItems, setCheckedItems] = useState<Set<number>>(new Set());
   const [photo, setPhoto] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -61,10 +62,14 @@ export default function HealthBingo() {
     setStep("card");
   };
 
+  const handleEmailSubmitted = () => {
+    setStep("intro");
+  };
+
   const handleReset = () => {
     setCheckedItems(new Set());
     setPhoto(null);
-    setStep("intro");
+    setStep("email");
   };
 
   return (
@@ -94,6 +99,9 @@ export default function HealthBingo() {
           </svg>
         )}
       </button>
+      {step === "email" && (
+        <EmailCollection onEmailSubmitted={handleEmailSubmitted} />
+      )}
       {step === "intro" && <BingoIntro onStart={handleStart} />}
       {step === "checklist" && (
         <BingoChecklist

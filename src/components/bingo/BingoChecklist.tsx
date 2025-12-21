@@ -23,12 +23,10 @@ const BINGO_QUESTIONS = [
   "Late-night meals",
   "Cooked at home",
   "Reduced sugary drinks",
-  "Lost weight",
-  "Gained weight",
-  "Maintained weight",
+  "Achieved weight goal",
   "Checked weight",
   "Food awareness",
-  "Alcohol periods",
+  "Drank a lot of alcohol",
   "Rest days",
   "Prioritized sleep",
   "Felt stressed",
@@ -40,6 +38,7 @@ const BINGO_QUESTIONS = [
   "Reduced alcohol",
   "Improved flexibility",
   "100kg+ benchpress",
+  "Squats or waist work",
   "New fitness friend",
   "Fitness app sub",
   "Quit unhealthy habits",
@@ -52,19 +51,12 @@ export default function BingoChecklist({
   const [checkedItems, setCheckedItems] = useState<Set<number>>(initialChecked);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const WEIGHT_INDICES = [16, 17, 18]; // Lost weight, Gained weight, Maintained weight
-
   const toggleItem = (index: number) => {
     const newChecked = new Set(checkedItems);
 
     if (newChecked.has(index)) {
       newChecked.delete(index);
     } else {
-      if (WEIGHT_INDICES.includes(index)) {
-        WEIGHT_INDICES.forEach((weightIndex) => {
-          newChecked.delete(weightIndex);
-        });
-      }
       newChecked.add(index);
     }
     setCheckedItems(newChecked);
@@ -100,10 +92,10 @@ export default function BingoChecklist({
             Your 2025 Health Bingo
           </h2>
           <div className="inline-block bg-kulagreen text-white font-bold px-4 sm:px-6 py-2 sm:py-3 border-4 border-black shadow-brutal-sm text-sm sm:text-base mb-4 md:hidden">
-            Checked: {checkedItems.size} / 36
+            Checked: {checkedItems.size} / 35
           </div>
           <div className="text-sm text-gray-600 mb-2 md:hidden">
-            Question {currentIndex + 1} of 36
+            Question {currentIndex + 1} of 35
           </div>
           <div className="w-full max-w-md mx-auto bg-gray-200 border-4 border-black h-4">
             <div

@@ -37,6 +37,7 @@ const BINGO_QUESTIONS = [
   "Tracked calories",
   "Intermittent fasting",
   "Reduced alcohol",
+  "Zero alcohol",
   "Improved flexibility",
   "100kg+ benchpress",
   "Squats or waist work",
@@ -45,9 +46,9 @@ const BINGO_QUESTIONS = [
   "Quit unhealthy habits",
 ];
 
-const UNHEALTHY_HABITS_MINUS_3 = new Set([12, 22]); // Ate junk food, Felt stressed
-const UNHEALTHY_HABITS_MINUS_5 = new Set([13, 19]); // Late-night meals, Drank a lot of alcohol
-const BONUS_HABITS = new Set([7, 8, 26, 30, 31, 32, 33]); // Ran a marathon, Took stairs, Tracked calories, 100kg+ benchpress, Squats or waist work, New fitness friend, Fitness app sub
+const UNHEALTHY_HABITS_MINUS_3 = new Set([12, 22]);
+const UNHEALTHY_HABITS_MINUS_5 = new Set([13, 19]);
+const BONUS_HABITS = new Set([7, 8, 26, 28, 29, 31, 32, 33, 34]);
 
 const UNHEALTHY_HABITS = new Set([
   ...UNHEALTHY_HABITS_MINUS_3,
@@ -201,7 +202,7 @@ export default function BingoCardGenerator({
       link.href = canvas.toDataURL("image/png");
       link.click();
     } catch {
-      // Error generating image
+      setIsGenerating(false);
     } finally {
       setIsGenerating(false);
     }

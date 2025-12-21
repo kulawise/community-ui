@@ -24,7 +24,7 @@ export default function HealthBingo() {
         await audioRef.current?.play();
         setIsPlaying(true);
       } catch {
-        // Error playing audio
+        setIsPlaying(false);
       }
     };
 

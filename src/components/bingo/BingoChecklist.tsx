@@ -36,6 +36,7 @@ const BINGO_QUESTIONS = [
   "Tracked calories",
   "Intermittent fasting",
   "Reduced alcohol",
+  "Zero alcohol",
   "Improved flexibility",
   "100kg+ benchpress",
   "Squats or waist work",
@@ -51,12 +52,19 @@ export default function BingoChecklist({
   const [checkedItems, setCheckedItems] = useState<Set<number>>(initialChecked);
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  const ALCOHOL_INDICES = [28, 29];
+
   const toggleItem = (index: number) => {
     const newChecked = new Set(checkedItems);
 
     if (newChecked.has(index)) {
       newChecked.delete(index);
     } else {
+      if (ALCOHOL_INDICES.includes(index)) {
+        ALCOHOL_INDICES.forEach((alcoholIndex) => {
+          newChecked.delete(alcoholIndex);
+        });
+      }
       newChecked.add(index);
     }
     setCheckedItems(newChecked);
@@ -95,7 +103,7 @@ export default function BingoChecklist({
             Checked: {checkedItems.size} / 35
           </div>
           <div className="text-sm text-gray-600 mb-2 md:hidden">
-            Question {currentIndex + 1} of 35
+            Question {currentIndex + 1} of 36
           </div>
           <div className="w-full max-w-md mx-auto bg-gray-200 border-4 border-black h-4">
             <div

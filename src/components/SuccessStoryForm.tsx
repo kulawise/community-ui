@@ -5,6 +5,11 @@ interface SuccessStoryFormProps {
   onClose: () => void;
 }
 
+const inputClass = (hasError: boolean) =>
+  `w-full px-4 py-3 rounded-lg border bg-white ${
+    hasError ? "border-error" : "border-outline-variant"
+  } focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-body-md`;
+
 export default function SuccessStoryForm({ onClose }: SuccessStoryFormProps) {
   const [formData, setFormData] = useState({
     remainAnonymous: false,
@@ -96,12 +101,12 @@ export default function SuccessStoryForm({ onClose }: SuccessStoryFormProps) {
   };
 
   return (
-    <div className="min-h-screen bg-white py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-surface py-8 px-4 sm:px-6 lg:px-8 font-body-md text-on-surface">
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
           <button
             onClick={onClose}
-            className="text-gray-600 hover:text-gray-900 font-medium mb-4 flex items-center gap-2"
+            className="text-on-surface-variant hover:text-primary font-label-bold mb-4 flex items-center gap-2 transition-colors"
           >
             <svg
               className="w-5 h-5"
@@ -118,36 +123,36 @@ export default function SuccessStoryForm({ onClose }: SuccessStoryFormProps) {
             </svg>
             Back
           </button>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
-            Share Your 2025 Success Story
+          <h1 className="font-headline-xl text-headline-xl text-on-surface mb-4">
+            Share Your Success Story
           </h1>
-          <p className="text-lg text-gray-700">
+          <p className="text-body-lg font-body-lg text-on-surface-variant">
             Help us inspire others by sharing your health and fitness journey.
             We'll use your story to create engaging content for our community.
           </p>
         </div>
 
         {isSubmitted ? (
-          <div className="bg-kulagreen/10 border-4 border-kulagreen p-8 text-center rounded-sm">
+          <div className="bg-primary/10 border border-primary/30 rounded-2xl p-8 text-center">
             <div className="text-5xl mb-4">🎉</div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="font-headline-md text-headline-md text-on-surface mb-4">
               Thank You for Sharing Your Story!
             </h2>
-            <p className="text-lg text-gray-700 mb-6">
+            <p className="text-body-lg font-body-lg text-on-surface-variant mb-6">
               We'll review your submission and may feature it on our Instagram.
               Keep an eye out!
             </p>
             <button
               onClick={onClose}
-              className="bg-kulagreen text-white font-bold px-8 py-4 rounded-sm shadow-brutal hover:shadow-brutal-sm hover:translate-x-1 hover:translate-y-1 transition-all duration-150 text-lg border-4 border-black"
+              className="bg-primary text-on-primary font-label-bold px-8 py-4 rounded-lg hover:opacity-90 active:scale-95 transition-all text-lg"
             >
               Return Home
             </button>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-8">
-            <div className="bg-gray-50 border-4 border-black p-6 space-y-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+            <div className="bg-surface-container-low border border-outline-variant/30 rounded-2xl p-6 space-y-6">
+              <h2 className="font-headline-md text-headline-md text-on-surface mb-4">
                 Personal Information
               </h2>
 
@@ -162,11 +167,11 @@ export default function SuccessStoryForm({ onClose }: SuccessStoryFormProps) {
                       remainAnonymous: e.target.checked,
                     })
                   }
-                  className="w-5 h-5 border-2 border-black text-kulagreen focus:ring-2 focus:ring-kulayellow cursor-pointer"
+                  className="w-5 h-5 rounded border border-outline-variant text-primary focus:ring-2 focus:ring-primary/30 cursor-pointer"
                 />
                 <label
                   htmlFor="remainAnonymous"
-                  className="font-medium text-gray-900 cursor-pointer"
+                  className="font-body-md text-on-surface cursor-pointer"
                 >
                   I would like to remain anonymous
                 </label>
@@ -177,7 +182,7 @@ export default function SuccessStoryForm({ onClose }: SuccessStoryFormProps) {
                   <div>
                     <label
                       htmlFor="firstName"
-                      className="block text-sm font-bold text-gray-900 mb-2 uppercase tracking-wide"
+                      className="block text-sm font-label-bold text-on-surface mb-2 uppercase tracking-wide"
                     >
                       First Name *
                     </label>
@@ -190,13 +195,11 @@ export default function SuccessStoryForm({ onClose }: SuccessStoryFormProps) {
                         if (errors.firstName)
                           setErrors({ ...errors, firstName: "" });
                       }}
-                      className={`w-full px-4 py-3 border-4 ${
-                        errors.firstName ? "border-red-500" : "border-black"
-                      } focus:border-kulagreen focus:ring-4 focus:ring-kulayellow transition-all font-medium`}
+                      className={inputClass(!!errors.firstName)}
                       placeholder="Your first name"
                     />
                     {errors.firstName && (
-                      <p className="text-red-600 text-sm mt-1">
+                      <p className="text-error text-sm mt-1">
                         {errors.firstName}
                       </p>
                     )}
@@ -205,7 +208,7 @@ export default function SuccessStoryForm({ onClose }: SuccessStoryFormProps) {
                   <div>
                     <label
                       htmlFor="surname"
-                      className="block text-sm font-bold text-gray-900 mb-2 uppercase tracking-wide"
+                      className="block text-sm font-label-bold text-on-surface mb-2 uppercase tracking-wide"
                     >
                       Surname *
                     </label>
@@ -218,13 +221,11 @@ export default function SuccessStoryForm({ onClose }: SuccessStoryFormProps) {
                         if (errors.surname)
                           setErrors({ ...errors, surname: "" });
                       }}
-                      className={`w-full px-4 py-3 border-4 ${
-                        errors.surname ? "border-red-500" : "border-black"
-                      } focus:border-kulagreen focus:ring-4 focus:ring-kulayellow transition-all font-medium`}
+                      className={inputClass(!!errors.surname)}
                       placeholder="Your surname"
                     />
                     {errors.surname && (
-                      <p className="text-red-600 text-sm mt-1">
+                      <p className="text-error text-sm mt-1">
                         {errors.surname}
                       </p>
                     )}
@@ -235,7 +236,7 @@ export default function SuccessStoryForm({ onClose }: SuccessStoryFormProps) {
               <div>
                 <label
                   htmlFor="gender"
-                  className="block text-sm font-bold text-gray-900 mb-2 uppercase tracking-wide"
+                  className="block text-sm font-label-bold text-on-surface mb-2 uppercase tracking-wide"
                 >
                   Gender *
                 </label>
@@ -246,9 +247,7 @@ export default function SuccessStoryForm({ onClose }: SuccessStoryFormProps) {
                     setFormData({ ...formData, gender: e.target.value });
                     if (errors.gender) setErrors({ ...errors, gender: "" });
                   }}
-                  className={`w-full px-4 py-3 border-4 ${
-                    errors.gender ? "border-red-500" : "border-black"
-                  } focus:border-kulagreen focus:ring-4 focus:ring-kulayellow transition-all font-medium bg-white`}
+                  className={inputClass(!!errors.gender)}
                 >
                   <option value="">Select gender...</option>
                   <option value="male">Male</option>
@@ -257,14 +256,14 @@ export default function SuccessStoryForm({ onClose }: SuccessStoryFormProps) {
                   <option value="prefer-not-to-say">Prefer not to say</option>
                 </select>
                 {errors.gender && (
-                  <p className="text-red-600 text-sm mt-1">{errors.gender}</p>
+                  <p className="text-error text-sm mt-1">{errors.gender}</p>
                 )}
               </div>
 
               <div>
                 <label
                   htmlFor="instagramHandle"
-                  className="block text-sm font-bold text-gray-900 mb-2 uppercase tracking-wide"
+                  className="block text-sm font-label-bold text-on-surface mb-2 uppercase tracking-wide"
                 >
                   Instagram Handle (Optional)
                 </label>
@@ -278,20 +277,20 @@ export default function SuccessStoryForm({ onClose }: SuccessStoryFormProps) {
                       instagramHandle: e.target.value,
                     })
                   }
-                  className="w-full px-4 py-3 border-4 border-black focus:border-kulagreen focus:ring-4 focus:ring-kulayellow transition-all font-medium"
+                  className={inputClass(false)}
                   placeholder="@yourhandle"
                 />
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-on-surface-variant mt-1">
                   We'll tag you when we feature your story (if provided)
                 </p>
               </div>
             </div>
 
-            <div className="bg-gray-50 border-4 border-black p-6 space-y-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+            <div className="bg-surface-container-low border border-outline-variant/30 rounded-2xl p-6 space-y-6">
+              <h2 className="font-headline-md text-headline-md text-on-surface mb-4">
                 Your Success Story
               </h2>
-              <p className="text-gray-700 mb-6">
+              <p className="text-on-surface-variant mb-6 font-body-md">
                 Please answer these questions to help us tell your story
                 effectively.
               </p>
@@ -299,7 +298,7 @@ export default function SuccessStoryForm({ onClose }: SuccessStoryFormProps) {
               <div>
                 <label
                   htmlFor="question1"
-                  className="block text-sm font-bold text-gray-900 mb-2 uppercase tracking-wide"
+                  className="block text-sm font-label-bold text-on-surface mb-2 uppercase tracking-wide"
                 >
                   What was your main health or fitness goal when you started? *
                 </label>
@@ -311,14 +310,12 @@ export default function SuccessStoryForm({ onClose }: SuccessStoryFormProps) {
                     if (errors.question1)
                       setErrors({ ...errors, question1: "" });
                   }}
-                  className={`w-full px-4 py-3 border-4 ${
-                    errors.question1 ? "border-red-500" : "border-black"
-                  } focus:border-kulagreen focus:ring-4 focus:ring-kulayellow transition-all font-medium resize-none`}
+                  className={`${inputClass(!!errors.question1)} resize-none`}
                   placeholder="Describe your starting point and what you wanted to achieve..."
                   rows={4}
                 />
                 {errors.question1 && (
-                  <p className="text-red-600 text-sm mt-1">
+                  <p className="text-error text-sm mt-1">
                     {errors.question1}
                   </p>
                 )}
@@ -327,7 +324,7 @@ export default function SuccessStoryForm({ onClose }: SuccessStoryFormProps) {
               <div>
                 <label
                   htmlFor="question2"
-                  className="block text-sm font-bold text-gray-900 mb-2 uppercase tracking-wide"
+                  className="block text-sm font-label-bold text-on-surface mb-2 uppercase tracking-wide"
                 >
                   What challenges did you face along the way? *
                 </label>
@@ -339,14 +336,12 @@ export default function SuccessStoryForm({ onClose }: SuccessStoryFormProps) {
                     if (errors.question2)
                       setErrors({ ...errors, question2: "" });
                   }}
-                  className={`w-full px-4 py-3 border-4 ${
-                    errors.question2 ? "border-red-500" : "border-black"
-                  } focus:border-kulagreen focus:ring-4 focus:ring-kulayellow transition-all font-medium resize-none`}
+                  className={`${inputClass(!!errors.question2)} resize-none`}
                   placeholder="Share the obstacles you overcame..."
                   rows={4}
                 />
                 {errors.question2 && (
-                  <p className="text-red-600 text-sm mt-1">
+                  <p className="text-error text-sm mt-1">
                     {errors.question2}
                   </p>
                 )}
@@ -355,7 +350,7 @@ export default function SuccessStoryForm({ onClose }: SuccessStoryFormProps) {
               <div>
                 <label
                   htmlFor="question3"
-                  className="block text-sm font-bold text-gray-900 mb-2 uppercase tracking-wide"
+                  className="block text-sm font-label-bold text-on-surface mb-2 uppercase tracking-wide"
                 >
                   What strategies or habits helped you succeed? *
                 </label>
@@ -367,14 +362,12 @@ export default function SuccessStoryForm({ onClose }: SuccessStoryFormProps) {
                     if (errors.question3)
                       setErrors({ ...errors, question3: "" });
                   }}
-                  className={`w-full px-4 py-3 border-4 ${
-                    errors.question3 ? "border-red-500" : "border-black"
-                  } focus:border-kulagreen focus:ring-4 focus:ring-kulayellow transition-all font-medium resize-none`}
+                  className={`${inputClass(!!errors.question3)} resize-none`}
                   placeholder="What worked for you? What routines or approaches made a difference?"
                   rows={4}
                 />
                 {errors.question3 && (
-                  <p className="text-red-600 text-sm mt-1">
+                  <p className="text-error text-sm mt-1">
                     {errors.question3}
                   </p>
                 )}
@@ -383,7 +376,7 @@ export default function SuccessStoryForm({ onClose }: SuccessStoryFormProps) {
               <div>
                 <label
                   htmlFor="question4"
-                  className="block text-sm font-bold text-gray-900 mb-2 uppercase tracking-wide"
+                  className="block text-sm font-label-bold text-on-surface mb-2 uppercase tracking-wide"
                 >
                   What results have you achieved? (Be specific with numbers if
                   possible) *
@@ -396,14 +389,12 @@ export default function SuccessStoryForm({ onClose }: SuccessStoryFormProps) {
                     if (errors.question4)
                       setErrors({ ...errors, question4: "" });
                   }}
-                  className={`w-full px-4 py-3 border-4 ${
-                    errors.question4 ? "border-red-500" : "border-black"
-                  } focus:border-kulagreen focus:ring-4 focus:ring-kulayellow transition-all font-medium resize-none`}
+                  className={`${inputClass(!!errors.question4)} resize-none`}
                   placeholder="Share your achievements - weight loss, strength gains, health improvements, etc..."
                   rows={4}
                 />
                 {errors.question4 && (
-                  <p className="text-red-600 text-sm mt-1">
+                  <p className="text-error text-sm mt-1">
                     {errors.question4}
                   </p>
                 )}
@@ -412,7 +403,7 @@ export default function SuccessStoryForm({ onClose }: SuccessStoryFormProps) {
               <div>
                 <label
                   htmlFor="question5"
-                  className="block text-sm font-bold text-gray-900 mb-2 uppercase tracking-wide"
+                  className="block text-sm font-label-bold text-on-surface mb-2 uppercase tracking-wide"
                 >
                   How has this transformation impacted your life beyond just the
                   physical changes? *
@@ -425,14 +416,12 @@ export default function SuccessStoryForm({ onClose }: SuccessStoryFormProps) {
                     if (errors.question5)
                       setErrors({ ...errors, question5: "" });
                   }}
-                  className={`w-full px-4 py-3 border-4 ${
-                    errors.question5 ? "border-red-500" : "border-black"
-                  } focus:border-kulagreen focus:ring-4 focus:ring-kulayellow transition-all font-medium resize-none`}
+                  className={`${inputClass(!!errors.question5)} resize-none`}
                   placeholder="How has your confidence, energy, relationships, or overall well-being changed?"
                   rows={4}
                 />
                 {errors.question5 && (
-                  <p className="text-red-600 text-sm mt-1">
+                  <p className="text-error text-sm mt-1">
                     {errors.question5}
                   </p>
                 )}
@@ -441,7 +430,7 @@ export default function SuccessStoryForm({ onClose }: SuccessStoryFormProps) {
               <div>
                 <label
                   htmlFor="question6"
-                  className="block text-sm font-bold text-gray-900 mb-2 uppercase tracking-wide"
+                  className="block text-sm font-label-bold text-on-surface mb-2 uppercase tracking-wide"
                 >
                   What advice would you give to someone just starting their
                   health journey? *
@@ -454,14 +443,12 @@ export default function SuccessStoryForm({ onClose }: SuccessStoryFormProps) {
                     if (errors.question6)
                       setErrors({ ...errors, question6: "" });
                   }}
-                  className={`w-full px-4 py-3 border-4 ${
-                    errors.question6 ? "border-red-500" : "border-black"
-                  } focus:border-kulagreen focus:ring-4 focus:ring-kulayellow transition-all font-medium resize-none`}
+                  className={`${inputClass(!!errors.question6)} resize-none`}
                   placeholder="Share your wisdom and encouragement..."
                   rows={4}
                 />
                 {errors.question6 && (
-                  <p className="text-red-600 text-sm mt-1">
+                  <p className="text-error text-sm mt-1">
                     {errors.question6}
                   </p>
                 )}
@@ -472,14 +459,14 @@ export default function SuccessStoryForm({ onClose }: SuccessStoryFormProps) {
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 px-6 py-4 border-4 border-black bg-white text-gray-900 font-bold hover:bg-gray-100 hover:translate-x-1 hover:translate-y-1 shadow-brutal-sm hover:shadow-none transition-all"
+                className="flex-1 px-6 py-4 rounded-lg border border-outline-variant bg-white text-on-surface font-label-bold hover:bg-surface-container transition-all"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="flex-1 bg-kulagreen text-white font-bold px-6 py-4 border-4 border-black hover:bg-kulagreen-dark hover:translate-x-1 hover:translate-y-1 shadow-brutal-sm hover:shadow-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 bg-primary text-on-primary font-label-bold px-6 py-4 rounded-lg hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? "Submitting..." : "Submit Story"}
               </button>

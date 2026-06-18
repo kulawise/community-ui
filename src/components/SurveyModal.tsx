@@ -27,6 +27,11 @@ const goalFactors = [
   "staying consistent with friends",
 ];
 
+const inputClass = (hasError: boolean) =>
+  `w-full px-4 py-3 rounded-lg border bg-white ${
+    hasError ? "border-error" : "border-outline-variant"
+  } focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-body-md`;
+
 export default function SurveyModal({
   isOpen,
   onClose,
@@ -141,24 +146,22 @@ export default function SurveyModal({
 
   return (
     <div
-      className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 backdrop-blur-sm"
+      className="fixed inset-0 bg-on-surface/60 flex items-center justify-center z-50 p-4 backdrop-blur-sm"
       onClick={handleBackdropClick}
     >
       <div
-        className="bg-white border-4 border-black shadow-brutal-lg max-w-2xl w-full p-6 sm:p-8 relative max-h-[90vh] overflow-hidden flex flex-col"
+        className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 sm:p-8 relative max-h-[90vh] overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {!isSubmitted && (
           <>
-            <div className="absolute top-0 right-0 w-12 h-12 bg-kulayellow border-b-4 border-l-4 border-black"></div>
-
             <div className="flex justify-between items-center mb-6 flex-shrink-0">
-              <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900">
+              <h2 className="font-headline-md text-headline-md text-on-surface">
                 Take a simple survey to join
               </h2>
               <button
                 onClick={onClose}
-                className="text-gray-600 hover:text-gray-900 transition-colors border-2 border-black hover:bg-kulayellow p-1 rounded-sm"
+                className="text-on-surface-variant hover:text-primary transition-colors rounded-full hover:bg-surface-container p-1"
                 aria-label="Close modal"
               >
                 <svg
@@ -170,14 +173,14 @@ export default function SurveyModal({
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    strokeWidth={3}
+                    strokeWidth={2}
                     d="M6 18L18 6M6 6l12 12"
                   />
                 </svg>
               </button>
             </div>
 
-            <p className="text-gray-700 mb-6 font-medium flex-shrink-0">
+            <p className="text-on-surface-variant mb-6 font-body-md flex-shrink-0">
               Answer a few quick questions and get your community invite link.
             </p>
           </>
@@ -186,11 +189,10 @@ export default function SurveyModal({
         {isSubmitted ? (
           <div className="flex flex-col items-center justify-center py-8 space-y-6">
             <div className="text-center">
-              {/* <div className="text-4xl mb-4">✅</div> */}
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">
+              <h3 className="font-headline-md text-headline-md text-on-surface mb-2">
                 Thank you for taking the survey!
               </h3>
-              <p className="text-gray-700 mb-6">
+              <p className="text-on-surface-variant mb-6 font-body-md">
                 Your response has been recorded. Join our Telegram community to
                 get started!
               </p>
@@ -199,13 +201,13 @@ export default function SurveyModal({
               href={telegramLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-kulagreen text-white font-bold px-8 py-4 rounded-sm shadow-brutal hover:shadow-brutal-sm hover:translate-x-1 hover:translate-y-1 transition-all duration-150 text-lg border-4 border-black"
+              className="bg-primary text-on-primary font-label-bold px-8 py-4 rounded-lg hover:opacity-90 active:scale-95 transition-all text-lg"
             >
               Join the Telegram community
             </a>
             <button
               onClick={onClose}
-              className="text-gray-600 hover:text-gray-900 font-medium underline"
+              className="text-on-surface-variant hover:text-primary font-body-md underline"
             >
               Close
             </button>
@@ -218,7 +220,7 @@ export default function SurveyModal({
             <div>
               <label
                 htmlFor="name"
-                className="block text-sm font-bold text-gray-900 mb-2 uppercase tracking-wide"
+                className="block text-sm font-label-bold text-on-surface mb-2 uppercase tracking-wide"
               >
                 Name
               </label>
@@ -230,21 +232,19 @@ export default function SurveyModal({
                   setFormData({ ...formData, name: e.target.value });
                   if (errors.name) setErrors({ ...errors, name: "" });
                 }}
-                className={`w-full px-4 py-3 border-4 ${
-                  errors.name ? "border-red-500" : "border-black"
-                } focus:border-kulagreen focus:ring-4 focus:ring-kulayellow transition-all font-medium`}
+                className={inputClass(!!errors.name)}
                 placeholder="Your name"
                 required
               />
               {errors.name && (
-                <p className="text-red-600 text-sm mt-1">{errors.name}</p>
+                <p className="text-error text-sm mt-1">{errors.name}</p>
               )}
             </div>
 
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-bold text-gray-900 mb-2 uppercase tracking-wide"
+                className="block text-sm font-label-bold text-on-surface mb-2 uppercase tracking-wide"
               >
                 Email
               </label>
@@ -256,21 +256,19 @@ export default function SurveyModal({
                   setFormData({ ...formData, email: e.target.value });
                   if (errors.email) setErrors({ ...errors, email: "" });
                 }}
-                className={`w-full px-4 py-3 border-4 ${
-                  errors.email ? "border-red-500" : "border-black"
-                } focus:border-kulagreen focus:ring-4 focus:ring-kulayellow transition-all font-medium`}
+                className={inputClass(!!errors.email)}
                 placeholder="your@email.com"
                 required
               />
               {errors.email && (
-                <p className="text-red-600 text-sm mt-1">{errors.email}</p>
+                <p className="text-error text-sm mt-1">{errors.email}</p>
               )}
             </div>
 
             <div>
               <label
                 htmlFor="healthGoal"
-                className="block text-sm font-bold text-gray-900 mb-2 uppercase tracking-wide"
+                className="block text-sm font-label-bold text-on-surface mb-2 uppercase tracking-wide"
               >
                 What is your health goal?
               </label>
@@ -282,9 +280,7 @@ export default function SurveyModal({
                   if (errors.healthGoal)
                     setErrors({ ...errors, healthGoal: "" });
                 }}
-                className={`w-full px-4 py-3 border-4 ${
-                  errors.healthGoal ? "border-red-500" : "border-black"
-                } focus:border-kulagreen focus:ring-4 focus:ring-kulayellow transition-all font-medium bg-white`}
+                className={inputClass(!!errors.healthGoal)}
                 required
               >
                 <option value="">Select a goal...</option>
@@ -295,22 +291,22 @@ export default function SurveyModal({
                 ))}
               </select>
               {errors.healthGoal && (
-                <p className="text-red-600 text-sm mt-1">{errors.healthGoal}</p>
+                <p className="text-error text-sm mt-1">{errors.healthGoal}</p>
               )}
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-gray-900 mb-3 uppercase tracking-wide">
+              <label className="block text-sm font-label-bold text-on-surface mb-3 uppercase tracking-wide">
                 What do you think matters to help you reach your goals?
               </label>
-              <p className="text-xs text-gray-600 mb-3 italic">
+              <p className="text-xs text-on-surface-variant mb-3 italic">
                 Select as many as apply.
               </p>
               <div className="space-y-2">
                 {goalFactors.map((factor) => (
                   <label
                     key={factor}
-                    className="flex items-center gap-3 p-3 border-2 border-gray-300 hover:border-kulagreen hover:bg-kulagreen/5 transition-all cursor-pointer"
+                    className="flex items-center gap-3 p-3 rounded-lg border border-outline-variant/40 hover:border-primary hover:bg-primary/5 transition-all cursor-pointer"
                   >
                     <input
                       type="checkbox"
@@ -321,16 +317,16 @@ export default function SurveyModal({
                           setErrors({ ...errors, selectedFactors: "" });
                         }
                       }}
-                      className="w-5 h-5 border-2 border-black text-kulagreen focus:ring-2 focus:ring-kulayellow cursor-pointer"
+                      className="w-5 h-5 rounded border border-outline-variant text-primary focus:ring-2 focus:ring-primary/30 cursor-pointer"
                     />
-                    <span className="font-medium text-gray-900 capitalize">
+                    <span className="font-body-md text-on-surface capitalize">
                       {factor}
                     </span>
                   </label>
                 ))}
               </div>
               {errors.selectedFactors && (
-                <p className="text-red-600 text-sm mt-2">
+                <p className="text-error text-sm mt-2">
                   {errors.selectedFactors}
                 </p>
               )}
@@ -339,7 +335,7 @@ export default function SurveyModal({
             <div>
               <label
                 htmlFor="anythingElse"
-                className="block text-sm font-bold text-gray-900 mb-2 uppercase tracking-wide"
+                className="block text-sm font-label-bold text-on-surface mb-2 uppercase tracking-wide"
               >
                 Anything else?
               </label>
@@ -350,7 +346,7 @@ export default function SurveyModal({
                 onChange={(e) =>
                   setFormData({ ...formData, anythingElse: e.target.value })
                 }
-                className="w-full px-4 py-3 border-4 border-black focus:border-kulagreen focus:ring-4 focus:ring-kulayellow transition-all font-medium"
+                className={inputClass(false)}
                 placeholder="Add anything else..."
               />
             </div>
@@ -359,7 +355,7 @@ export default function SurveyModal({
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 px-4 py-3 border-4 border-black bg-white text-gray-900 font-bold hover:bg-gray-100 hover:translate-x-1 hover:translate-y-1 shadow-brutal-sm hover:shadow-none transition-all"
+                className="flex-1 px-4 py-3 rounded-lg border border-outline-variant bg-white text-on-surface font-label-bold hover:bg-surface-container transition-all"
               >
                 Cancel
               </button>
@@ -372,7 +368,7 @@ export default function SurveyModal({
                   !formData.healthGoal ||
                   formData.selectedFactors.length === 0
                 }
-                className="flex-1 bg-kulagreen text-white font-bold px-4 py-3 border-4 border-black hover:bg-kulagreen-dark hover:translate-x-1 hover:translate-y-1 shadow-brutal-sm hover:shadow-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 bg-primary text-on-primary font-label-bold px-4 py-3 rounded-lg hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? "Submitting..." : "Submit & Join"}
               </button>

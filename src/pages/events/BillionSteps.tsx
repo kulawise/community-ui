@@ -96,7 +96,7 @@ const BillionSteps: React.FC = () => {
   useEffect(() => {
     let eventSource: EventSource | null = null;
     let pollInterval: ReturnType<typeof setInterval> | null = null;
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
+    const API_URL = import.meta.env.VITE_API_URL || 'https://api.staging.kulawise.com';
 
     const handleSnapshot = (data: CampaignSnapshot) => {
       setSnapshot(data);
@@ -166,7 +166,7 @@ const BillionSteps: React.FC = () => {
     e.preventDefault();
     if (!searchUsername) return;
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
+      const API_URL = import.meta.env.VITE_API_URL || 'https://api.staging.kulawise.com';
       const res = await fetch(`${API_URL}/community/events/${CAMPAIGN_SLUG}/search?username=${searchUsername}`);
       const data = await res.json();
       if (res.ok && data.data) {

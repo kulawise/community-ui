@@ -22,6 +22,11 @@ interface CampaignSnapshot {
   topUsers: LeaderboardEntry[];
   topCircles: any[];
   champions: any[];
+  sponsors: {
+    name: string;
+    logo_url: string;
+    website_url: string;
+  }[];
   status: string;
   startAt?: string;
   endAt?: string;
@@ -206,7 +211,7 @@ const BillionSteps: React.FC = () => {
           
           {/* Status Badge */}
           {snapshot?.status && (
-            <div className="absolute top-0 right-4 sm:right-6 lg:right-8">
+            <div className="flex justify-center mb-6 sm:mb-0 sm:absolute sm:top-0 sm:right-6 lg:right-8">
               <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${
                 snapshot.status === 'active' 
                   ? 'bg-green-50 text-green-700 border-green-200' 
@@ -259,6 +264,61 @@ const BillionSteps: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Sponsors Marquee */}
+      {snapshot?.sponsors && snapshot.sponsors.length > 0 && (
+        <div className="bg-gray-50 border-b border-gray-200 py-6 overflow-hidden">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4 text-center">
+            <h3 className="text-xs font-bold tracking-widest text-gray-400 uppercase">Supported By</h3>
+          </div>
+          <div className="relative flex overflow-hidden whitespace-nowrap group">
+            {/* First Marquee Item */}
+            <motion.div
+              className="flex items-center min-w-full justify-around space-x-12 px-6 shrink-0"
+              animate={{ x: "-100%" }}
+              transition={{ repeat: Infinity, ease: "linear", duration: 20 }}
+            >
+              {snapshot.sponsors.map((sponsor, idx) => (
+                <a 
+                  key={`sponsor-1-${idx}`} 
+                  href={sponsor.website_url || "#"} 
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="flex flex-col items-center flex-shrink-0"
+                >
+                  {sponsor.logo_url ? (
+                    <img src={sponsor.logo_url} alt={sponsor.name} className="h-10 sm:h-12 w-auto object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300" />
+                  ) : (
+                    <div className="text-lg font-bold text-gray-400 hover:text-primary transition-colors">{sponsor.name}</div>
+                  )}
+                </a>
+              ))}
+            </motion.div>
+            {/* Second Marquee Item (Duplicate for seamless loop) */}
+            <motion.div
+              className="flex items-center min-w-full justify-around space-x-12 px-6 shrink-0"
+              animate={{ x: "-100%" }}
+              transition={{ repeat: Infinity, ease: "linear", duration: 20 }}
+            >
+              {snapshot.sponsors.map((sponsor, idx) => (
+                <a 
+                  key={`sponsor-2-${idx}`} 
+                  href={sponsor.website_url || "#"} 
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="flex flex-col items-center flex-shrink-0"
+                >
+                  {sponsor.logo_url ? (
+                    <img src={sponsor.logo_url} alt={sponsor.name} className="h-10 sm:h-12 w-auto object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300" />
+                  ) : (
+                    <div className="text-lg font-bold text-gray-400 hover:text-primary transition-colors">{sponsor.name}</div>
+                  )}
+                </a>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      )}
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full">

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from "../../components/community/Navbar";
 import CommunityFooter from "../../components/community/CommunityFooter";
 
@@ -57,6 +58,7 @@ const formatDateRange = (start?: string, end?: string): string | null => {
 
 const BillionSteps: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<'users' | 'circles' | 'champions'>('users');
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
   // Stale-While-Revalidate: Load from localStorage instantly
   const [snapshot, setSnapshot] = useState<CampaignSnapshot | null>(() => {
@@ -171,6 +173,7 @@ const BillionSteps: React.FC = () => {
       const data = await res.json();
       if (res.ok && data.data) {
         setSearchResult(data.data);
+        setIsModalOpen(true);
       } else {
         setSearchResult(null);
         alert(data.error || "User not found");
@@ -276,32 +279,6 @@ const BillionSteps: React.FC = () => {
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
               </button>
             </form>
-            
-            <div className="mt-6 p-4 bg-gray-50 rounded-xl border border-gray-100 min-h-[120px] flex flex-col justify-center">
-              {searchResult ? (
-                <>
-                  <div className="flex items-center mb-4">
-                    <img src={searchResult.avatar || "https://ui-avatars.com/api/?name=" + searchResult.first_name} alt="Avatar" className="w-10 h-10 rounded-full mr-3" />
-                    <div>
-                      <div className="font-bold text-sm">{searchResult.first_name} {searchResult.last_name}</div>
-                      <div className="text-xs text-gray-500">@{searchResult.username}</div>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 text-center">
-                    <div>
-                      <div className="text-lg font-bold text-primary">{searchResult.steps.toLocaleString()}</div>
-                      <div className="text-xs text-gray-500">Steps</div>
-                    </div>
-                    <div>
-                      <div className="text-lg font-bold text-gray-900">#{searchResult.rank}</div>
-                      <div className="text-xs text-gray-500">Global Rank</div>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <p className="text-sm text-gray-500 text-center">Search to see your stats</p>
-              )}
-            </div>
           </div>
 
           {/* How It Works */}
@@ -369,7 +346,7 @@ const BillionSteps: React.FC = () => {
                             </div>
                             <div className="ml-4">
                               <div className="text-sm font-medium text-gray-900">{user.first_name} {user.last_name}</div>
-                              <div className="text-xs text-gray-500">@{user.username}</div>
+                              <div className="text-xs text-gray-500">{user.username ? `@${user.username}` : "Username not set"}</div>
                             </div>
                           </div>
                         </td>
@@ -395,6 +372,64 @@ const BillionSteps: React.FC = () => {
       </div>
       
       <CommunityFooter />
+
+      {/* Search Result Modal */}
+      <AnimatePresence>
+        {isModalOpen && searchResult && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsModalOpen(false)}
+              className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative bg-white rounded-3xl shadow-xl w-full max-w-sm overflow-hidden z-10"
+            >
+              <div className="bg-primary px-6 py-8 text-center relative">
+                <button 
+                  onClick={() => setIsModalOpen(false)}
+                  className="absolute top-4 right-4 text-white/80 hover:text-white transition-colors"
+                >
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+                <div className="inline-block relative">
+                  <img 
+                    src={searchResult.avatar || `https://ui-avatars.com/api/?name=${searchResult.first_name}`} 
+                    alt="Avatar" 
+                    className="w-24 h-24 rounded-full border-4 border-white/20 shadow-lg object-cover"
+                  />
+                  <div className="absolute bottom-0 right-0 bg-white text-primary w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shadow-md border-2 border-primary">
+                    #{searchResult.rank}
+                  </div>
+                </div>
+                <h3 className="text-xl font-bold text-white mt-4">{searchResult.first_name} {searchResult.last_name}</h3>
+                <p className="text-primary-100 font-medium">{searchResult.username ? `@${searchResult.username}` : "Username not set"}</p>
+              </div>
+              <div className="p-6 bg-white">
+                <div className="bg-gray-50 rounded-2xl p-6 text-center border border-gray-100">
+                  <div className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">Total Steps</div>
+                  <div className="text-4xl font-black text-gray-900 tabular-nums">{searchResult.steps.toLocaleString()}</div>
+                </div>
+                <div className="mt-6 flex justify-center">
+                  <button 
+                    onClick={() => setIsModalOpen(false)}
+                    className="px-6 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-full transition-colors w-full"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

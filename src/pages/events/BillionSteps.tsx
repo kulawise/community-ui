@@ -42,6 +42,19 @@ const getRelativeTime = (dateString: string): string => {
   return `${Math.floor(diffInSeconds / 86400)} days ago`;
 };
 
+const formatDateRange = (start?: string, end?: string): string | null => {
+  if (!start && !end) return null;
+  const options: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', year: 'numeric' };
+  
+  if (start && end) {
+    return `${new Date(start).toLocaleDateString('en-US', options)} - ${new Date(end).toLocaleDateString('en-US', options)}`;
+  }
+  if (start) {
+    return `Starts ${new Date(start).toLocaleDateString('en-US', options)}`;
+  }
+  return `Ends ${new Date(end!).toLocaleDateString('en-US', options)}`;
+};
+
 const BillionSteps: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<'users' | 'circles' | 'champions'>('users');
   
@@ -82,7 +95,7 @@ const BillionSteps: React.FC = () => {
   // Main Connection logic (HTTP Backfill + SSE)
   useEffect(() => {
     let eventSource: EventSource | null = null;
-    let pollInterval: NodeJS.Timeout | null = null;
+    let pollInterval: ReturnType<typeof setInterval> | null = null;
     const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
 
     const handleSnapshot = (data: CampaignSnapshot) => {

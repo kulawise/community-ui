@@ -2,11 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { NAV_LINKS } from "../../data/communityContent";
 
-interface NavbarProps {
-  onJoinClick: () => void;
-}
-
-export default function Navbar({ onJoinClick }: NavbarProps) {
+export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const { pathname } = useLocation();
 
@@ -25,7 +21,7 @@ export default function Navbar({ onJoinClick }: NavbarProps) {
       <nav className="flex justify-between items-center px-gutter py-4 max-w-container-max mx-auto">
         <Link
           to="/"
-          className="font-headline-md text-headline-md font-extrabold text-primary"
+          className="font-headline-md text-xl sm:text-headline-md font-extrabold text-primary"
         >
           Kulawise
         </Link>
@@ -44,12 +40,12 @@ export default function Navbar({ onJoinClick }: NavbarProps) {
             </Link>
           ))}
         </div>
-        <button
-          onClick={onJoinClick}
-          className="bg-primary text-on-primary px-6 py-2.5 rounded-full font-label-bold active:scale-95 transition-all"
+        <a
+          href="https://kulawise.com"
+          className="bg-primary text-on-primary px-4 py-2 text-sm sm:px-6 sm:py-2.5 sm:text-base rounded-full font-label-bold active:scale-95 transition-all inline-block"
         >
-          Learn more
-        </button>
+          Download App
+        </a>
       </nav>
     </header>
   );

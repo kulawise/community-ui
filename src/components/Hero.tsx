@@ -1,10 +1,6 @@
 import { Link } from "react-router-dom";
 
-interface HeroProps {
-  onJoinClick: () => void;
-}
-
-export default function Hero({ onJoinClick }: HeroProps) {
+export default function Hero() {
   return (
     <section className="relative min-h-[85vh] flex items-center overflow-hidden bg-surface-container-low px-gutter py-20">
       <div className="max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
@@ -20,12 +16,12 @@ export default function Hero({ onJoinClick }: HeroProps) {
             you consistent.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <button
-              onClick={onJoinClick}
-              className="bg-primary text-on-primary px-8 py-4 rounded-lg font-headline-md text-body-md hover:opacity-90 transition-opacity active:scale-95"
+            <a
+              href="https://kulawise.com/#app-stores"
+              className="bg-primary text-on-primary px-8 py-4 rounded-lg font-headline-md text-body-md hover:opacity-90 transition-opacity active:scale-95 text-center inline-block"
             >
-              Join Waitlist
-            </button>
+              Download App
+            </a>
             <Link
               to="/impact"
               className="border-2 border-primary text-primary px-8 py-4 rounded-lg font-headline-md text-body-md hover:bg-primary/5 transition-colors text-center"
@@ -39,7 +35,7 @@ export default function Hero({ onJoinClick }: HeroProps) {
             <img
               className="w-full h-auto object-cover"
               alt="Kulawise app showing AI-guided health metrics"
-              src="/images/health-metrics.jpg"
+              src="/images/close-up-people-kitchen.jpg"
             />
           </div>
           <div className="absolute -top-6 -right-6 w-32 h-32 bg-sdg-good-health/20 rounded-full blur-3xl"></div>

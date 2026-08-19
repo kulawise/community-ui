@@ -8,15 +8,11 @@ import StoriesPreview from "../components/community/StoriesPreview";
 import B2BCallouts from "../components/community/B2BCallouts";
 import NewsletterSignup from "../components/community/NewsletterSignup";
 import CommunityFooter from "../components/community/CommunityFooter";
-import SurveyModal from "../components/SurveyModal";
 import SuccessStoryForm from "../components/SuccessStoryForm";
 
 export default function Home() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [showSuccessStory, setShowSuccessStory] = useState(false);
 
-  const handleJoinClick = () => setIsModalOpen(true);
-  const handleCloseModal = () => setIsModalOpen(false);
   const handleShareStoryClick = () => setShowSuccessStory(true);
   const handleCloseSuccessStory = () => setShowSuccessStory(false);
 
@@ -26,9 +22,9 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-surface font-body-md text-on-surface">
-      <Navbar onJoinClick={handleJoinClick} />
+      <Navbar />
       <main className="pt-20">
-        <Hero onJoinClick={handleJoinClick} />
+        <Hero />
         <LiveImpactStrip />
         <MethodologySection />
         <SDGTeaserSection />
@@ -37,7 +33,6 @@ export default function Home() {
         <NewsletterSignup />
       </main>
       <CommunityFooter />
-      <SurveyModal isOpen={isModalOpen} onClose={handleCloseModal} />
     </div>
   );
 }

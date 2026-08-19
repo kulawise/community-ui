@@ -6,6 +6,7 @@ export type NavLink = { label: string; href: string };
 
 export const NAV_LINKS: NavLink[] = [
   { label: "Home", href: "/" },
+  { label: "1B Steps", href: "/1b-steps" },
   { label: "Impact", href: "/impact" },
   // { label: "Stories", href: "/#stories" },
   // { label: "Partners", href: "/#partners" },
@@ -101,7 +102,7 @@ export const STORY_CARDS: StoryCard[] = [
     title: "Small Habits, Real Change",
     description:
       "Discover how Kula members are turning small, repeatable habits into lasting progress.",
-    image: "/images/health-metrics.jpg",
+    image: "/images/close-up-people-kitchen.jpg",
   },
 ];
 

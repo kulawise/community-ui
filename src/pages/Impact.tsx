@@ -1,7 +1,5 @@
-import { useState } from "react";
 import Navbar from "../components/community/Navbar";
 import CommunityFooter from "../components/community/CommunityFooter";
-import SurveyModal from "../components/SurveyModal";
 import {
   SDG_DETAIL_CARDS,
   IMPACT_METHODOLOGY,
@@ -10,13 +8,9 @@ import {
 const [goal3, goal1, goal12, goal17] = SDG_DETAIL_CARDS;
 
 export default function Impact() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleJoinClick = () => setIsModalOpen(true);
-  const handleCloseModal = () => setIsModalOpen(false);
-
   return (
     <div className="min-h-screen bg-surface font-body-md text-on-surface">
-      <Navbar onJoinClick={handleJoinClick} />
+      <Navbar />
       <main className="pt-24 overflow-hidden">
         <section className="relative px-gutter max-w-container-max mx-auto py-24 text-center">
           <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full mb-6">
@@ -244,16 +238,15 @@ export default function Impact() {
             Your daily habits add up. Join our community and start your
             journey toward personal and community wellness today.
           </p>
-          <button
-            onClick={handleJoinClick}
-            className="bg-primary text-on-primary px-10 py-5 rounded-full font-headline-md hover:shadow-xl transition-all hover:-translate-y-1"
+          <a
+            href="https://kulawise.com"
+            className="bg-primary text-on-primary px-10 py-5 rounded-full font-headline-md hover:shadow-xl transition-all hover:-translate-y-1 inline-block"
           >
             Join the Impact
-          </button>
+          </a>
         </section>
       </main>
       <CommunityFooter />
-      <SurveyModal isOpen={isModalOpen} onClose={handleCloseModal} />
     </div>
   );
 }

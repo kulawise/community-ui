@@ -112,7 +112,7 @@ export const B2B_CALLOUTS = [
     description:
       "Integrate Kulawise into your existing gym, studio, or corporate wellness program.",
     ctaLabel: "Apply to Join",
-    href: "tel:+2349069597307",
+    href: "mailto:hello@kulawise.com",
     image: null,
   },
   {

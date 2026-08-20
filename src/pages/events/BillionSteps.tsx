@@ -453,15 +453,32 @@ const BillionSteps: React.FC = () => {
                     {snapshot && currentTab === 'circles' && snapshot.topCircles?.map((circle) => (
                       <tr key={circle.circle_id} className="hover:bg-gray-50 transition-colors">
                         <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                          #{circle.rank}
+                          {circle.circle_title === "Kula Circle Official" ? (
+                            <span className="text-yellow-500 text-base" title="Official Circle">★</span>
+                          ) : (
+                            `#${circle.rank}`
+                          )}
                         </td>
                         <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <div className="flex-shrink-0 h-8 w-8">
                               <img className="h-8 w-8 rounded-full" src={circle.circle_image || `https://ui-avatars.com/api/?name=${circle.circle_title}`} alt="" />
                             </div>
-                            <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900">{circle.circle_title}</div>
+                            <div className="ml-4 flex-grow flex items-center justify-between">
+                              <div>
+                                <div className="text-sm font-medium text-gray-900">{circle.circle_title}</div>
+                                <div className="text-xs text-gray-500">
+                                  {circle.member_count ?? 0} {circle.member_count === 1 ? 'member' : 'members'}
+                                </div>
+                              </div>
+                              {circle.circle_title === "Kula Circle Official" && (
+                                <a
+                                  href={`kulawise://circles/join?id=${circle.public_id}`}
+                                  className="ml-4 px-3 py-1 bg-primary text-white text-xs font-semibold rounded-full hover:bg-primary/95 transition-colors shadow-sm"
+                                >
+                                  Join Circle
+                                </a>
+                              )}
                             </div>
                           </div>
                         </td>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from "../../components/community/Navbar";
 import CommunityFooter from "../../components/community/CommunityFooter";
@@ -11,6 +11,8 @@ interface LeaderboardEntry {
   avatar: string;
   steps: number;
   rank: number;
+  referrals?: number;
+  percentage?: number;
 }
 
 interface CampaignSnapshot {
@@ -51,7 +53,7 @@ const getRelativeTime = (dateString: string): string => {
 const formatDateRange = (start?: string, end?: string): string | null => {
   if (!start && !end) return null;
   const options: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', year: 'numeric' };
-  
+
   if (start && end) {
     return `${new Date(start).toLocaleDateString('en-US', options)} - ${new Date(end).toLocaleDateString('en-US', options)}`;
   }
@@ -61,10 +63,44 @@ const formatDateRange = (start?: string, end?: string): string | null => {
   return `Ends ${new Date(end!).toLocaleDateString('en-US', options)}`;
 };
 
+const AnimatedCounter: React.FC<{ value: number; duration?: number }> = ({ value, duration = 1.5 }) => {
+  const [displayValue, setDisplayValue] = useState(value);
+  const previousValueRef = useRef(value);
+
+  useEffect(() => {
+    const startValue = previousValueRef.current;
+    const endValue = value;
+    if (startValue === endValue) return;
+
+    let startTime: number | null = null;
+
+    const animate = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / (duration * 1000), 1);
+
+      // Easing function (easeOutQuad)
+      const easeProgress = progress * (2 - progress);
+      const currentValue = Math.floor(startValue + (endValue - startValue) * easeProgress);
+
+      setDisplayValue(currentValue);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        previousValueRef.current = endValue;
+      }
+    };
+
+    requestAnimationFrame(animate);
+  }, [value, duration]);
+
+  return <>{displayValue.toLocaleString()}</>;
+};
+
 const BillionSteps: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<'users' | 'circles' | 'champions'>('users');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
+
   // Stale-While-Revalidate: Load from localStorage instantly
   const [snapshot, setSnapshot] = useState<CampaignSnapshot | null>(() => {
     try {
@@ -130,7 +166,7 @@ const BillionSteps: React.FC = () => {
       }
 
       eventSource = new EventSource(`${API_URL}/community/events/${CAMPAIGN_SLUG}/stream`);
-      
+
       eventSource.onopen = () => {
         setIsConnected(true);
       };
@@ -148,10 +184,10 @@ const BillionSteps: React.FC = () => {
         console.warn("SSE disconnected, falling back to polling");
         setIsConnected(false);
         eventSource?.close();
-        
+
         // Start polling as fallback
         pollInterval = setInterval(fetchSnapshot, 30000);
-        
+
         // Try to reconnect SSE after 10 seconds
         setTimeout(connectSSE, 10000);
       };
@@ -191,7 +227,7 @@ const BillionSteps: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
       <Navbar />
-      
+
       {/* Live Indicator */}
       <div className="bg-white border-b border-gray-200 py-2">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center text-xs">
@@ -208,18 +244,16 @@ const BillionSteps: React.FC = () => {
       {/* Hero Section */}
       <div className="bg-white py-16 sm:py-24 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
-          
+
           {/* Status Badge */}
           {snapshot?.status && (
             <div className="flex justify-center mb-6 sm:mb-0 sm:absolute sm:top-0 sm:right-6 lg:right-8">
-              <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${
-                snapshot.status === 'active' 
-                  ? 'bg-green-50 text-green-700 border-green-200' 
+              <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${snapshot.status === 'active'
+                  ? 'bg-green-50 text-green-700 border-green-200'
                   : 'bg-red-50 text-red-700 border-red-200'
-              }`}>
-                <span className={`w-2 h-2 mr-1.5 rounded-full ${
-                  snapshot.status === 'active' ? 'bg-green-500' : 'bg-red-500'
-                }`}></span>
+                }`}>
+                <span className={`w-2 h-2 mr-1.5 rounded-full ${snapshot.status === 'active' ? 'bg-green-500' : 'bg-red-500'
+                  }`}></span>
                 {snapshot.status === 'active' ? 'Running' : 'Closed'}
               </span>
             </div>
@@ -227,9 +261,9 @@ const BillionSteps: React.FC = () => {
 
           <h1 className="text-xs sm:text-sm font-bold tracking-wider text-primary uppercase mb-4">A Billion Steps Campaign</h1>
           <div className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-black text-gray-900 tracking-tighter mb-8 tabular-nums">
-            {snapshot ? snapshot.totalSteps.toLocaleString() : "..."}
+            {snapshot ? <AnimatedCounter value={snapshot.totalSteps} /> : "..."}
           </div>
-          
+
           {snapshot && (snapshot.startAt || snapshot.endAt) && (
             <div className="text-sm sm:text-base font-medium text-gray-500 mb-8 max-w-2xl mx-auto flex items-center justify-center space-x-2">
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -241,16 +275,16 @@ const BillionSteps: React.FC = () => {
 
           <div className="max-w-3xl mx-auto">
             <div className="flex justify-between text-sm font-medium text-gray-500 mb-2">
-              <span>Progress to 1 Billion</span>
+              <span>Progress</span>
               <span>{snapshot ? snapshot.progress.toFixed(1) : 0}%</span>
             </div>
             <div className="w-full bg-gray-100 rounded-full h-4 mb-8 overflow-hidden">
-              <div 
-                className="bg-primary h-4 rounded-full transition-all duration-1000 ease-out" 
+              <div
+                className="bg-primary h-4 rounded-full transition-all duration-1000 ease-out"
                 style={{ width: `${snapshot ? snapshot.progress : 0}%` }}
               ></div>
             </div>
-            
+
             <div className="grid grid-cols-2 gap-4 sm:gap-8 max-w-xl mx-auto">
               <div className="flex flex-col">
                 <span className="text-lg sm:text-3xl font-bold text-gray-900">{snapshot ? snapshot.distanceKm.toLocaleString() : "..."} km</span>
@@ -279,10 +313,10 @@ const BillionSteps: React.FC = () => {
               transition={{ repeat: Infinity, ease: "linear", duration: 20 }}
             >
               {snapshot.sponsors.map((sponsor, idx) => (
-                <a 
-                  key={`sponsor-1-${idx}`} 
-                  href={sponsor.website_url || "#"} 
-                  target="_blank" 
+                <a
+                  key={`sponsor-1-${idx}`}
+                  href={sponsor.website_url || "#"}
+                  target="_blank"
                   rel="noreferrer"
                   className="flex flex-col items-center flex-shrink-0"
                 >
@@ -301,10 +335,10 @@ const BillionSteps: React.FC = () => {
               transition={{ repeat: Infinity, ease: "linear", duration: 20 }}
             >
               {snapshot.sponsors.map((sponsor, idx) => (
-                <a 
-                  key={`sponsor-2-${idx}`} 
-                  href={sponsor.website_url || "#"} 
-                  target="_blank" 
+                <a
+                  key={`sponsor-2-${idx}`}
+                  href={sponsor.website_url || "#"}
+                  target="_blank"
                   rel="noreferrer"
                   className="flex flex-col items-center flex-shrink-0"
                 >
@@ -323,16 +357,16 @@ const BillionSteps: React.FC = () => {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full">
         <div className="flex flex-col lg:grid lg:grid-cols-3 gap-8 lg:gap-12">
-          
+
           {/* User Search */}
           <div className="order-1 lg:col-start-1 lg:row-start-1 bg-white rounded-2xl shadow-sm border border-gray-100 p-6 self-start">
             <h3 className="text-lg font-bold text-gray-900 mb-4">Your Contribution</h3>
             <form onSubmit={handleSearch} className="relative">
-              <input 
-                type="text" 
+              <input
+                type="text"
                 value={searchUsername}
                 onChange={(e) => setSearchUsername(e.target.value)}
-                placeholder="Search your username (e.g. otobong)" 
+                placeholder="Search your username (e.g. otobong)"
                 className="w-full pl-4 pr-10 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
               />
               <button type="submit" className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary">
@@ -405,8 +439,8 @@ const BillionSteps: React.FC = () => {
                               <img className="h-8 w-8 rounded-full" src={user.avatar || `https://ui-avatars.com/api/?name=${user.first_name}`} alt="" />
                             </div>
                             <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900">{user.first_name} {user.last_name}</div>
-                              <div className="text-xs text-gray-500">{user.username ? `@${user.username}` : "Username not set"}</div>
+                              <div className="text-sm font-medium text-gray-900">{user.username || 'Anonymous User'}</div>
+                              <div className="text-xs text-gray-500">{user.username ? `@${user.username}` : ""}</div>
                             </div>
                           </div>
                         </td>
@@ -416,42 +450,42 @@ const BillionSteps: React.FC = () => {
                       </tr>
                     ))}
                     {snapshot && currentTab !== 'users' && (
-                       <tr>
-                         <td colSpan={3} className="px-4 sm:px-6 py-12 text-center text-sm text-gray-500">
-                           Data for {currentTab} coming soon.
-                         </td>
-                       </tr>
+                      <tr>
+                        <td colSpan={3} className="px-4 sm:px-6 py-12 text-center text-sm text-gray-500">
+                          Data for {currentTab} coming soon.
+                        </td>
+                      </tr>
                     )}
                   </tbody>
                 </table>
               </div>
             </div>
           </div>
-          
+
         </div>
       </div>
-      
+
       <CommunityFooter />
 
       {/* Search Result Modal */}
       <AnimatePresence>
         {isModalOpen && searchResult && (
           <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsModalOpen(false)}
               className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm"
             />
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               className="relative bg-white rounded-3xl shadow-xl w-full max-w-sm overflow-hidden z-10"
             >
               <div className="bg-primary px-6 py-8 text-center relative">
-                <button 
+                <button
                   onClick={() => setIsModalOpen(false)}
                   className="absolute top-4 right-4 text-white/80 hover:text-white transition-colors"
                 >
@@ -460,25 +494,41 @@ const BillionSteps: React.FC = () => {
                   </svg>
                 </button>
                 <div className="inline-block relative">
-                  <img 
-                    src={searchResult.avatar || `https://ui-avatars.com/api/?name=${searchResult.first_name}`} 
-                    alt="Avatar" 
+                  <img
+                    src={searchResult.avatar || `https://ui-avatars.com/api/?name=${searchResult.username || 'User'}`}
+                    alt="Avatar"
                     className="w-24 h-24 rounded-full border-4 border-white/20 shadow-lg object-cover"
                   />
                   <div className="absolute bottom-0 right-0 bg-white text-primary w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shadow-md border-2 border-primary">
                     #{searchResult.rank}
                   </div>
                 </div>
-                <h3 className="text-xl font-bold text-white mt-4">{searchResult.first_name} {searchResult.last_name}</h3>
-                <p className="text-primary-100 font-medium">{searchResult.username ? `@${searchResult.username}` : "Username not set"}</p>
+                <h3 className="text-xl font-bold text-white mt-4">{searchResult.username || 'Anonymous User'}</h3>
+                <p className="text-primary-100 font-medium">{searchResult.username ? `@${searchResult.username}` : ""}</p>
               </div>
-              <div className="p-6 bg-white">
-                <div className="bg-gray-50 rounded-2xl p-6 text-center border border-gray-100">
-                  <div className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">Total Steps</div>
-                  <div className="text-4xl font-black text-gray-900 tabular-nums">{searchResult.steps.toLocaleString()}</div>
+              <div className="p-6 bg-white flex flex-col gap-4">
+                <div className="bg-gray-50 rounded-2xl p-4 text-center border border-gray-100">
+                  <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Total Steps</div>
+                  <div className="text-3xl font-black text-gray-900 tabular-nums">{searchResult.steps.toLocaleString()}</div>
                 </div>
-                <div className="mt-6 flex justify-center">
-                  <button 
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-gray-50 rounded-2xl p-4 text-center border border-gray-100">
+                    <div className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Contribution</div>
+                    <div className="text-xl font-black text-gray-900 tabular-nums">
+                      {searchResult.percentage !== undefined ? `${searchResult.percentage.toFixed(2)}%` : '0%'}
+                    </div>
+                  </div>
+                  <div className="bg-gray-50 rounded-2xl p-4 text-center border border-gray-100">
+                    <div className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Referrals</div>
+                    <div className="text-xl font-black text-gray-900 tabular-nums">
+                      {searchResult.referrals ?? 0}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-4 flex justify-center">
+                  <button
                     onClick={() => setIsModalOpen(false)}
                     className="px-6 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-full transition-colors w-full"
                   >

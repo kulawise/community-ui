@@ -17,6 +17,7 @@ interface LeaderboardEntry {
 
 interface CampaignSnapshot {
   campaign: string;
+  campaignName: string;
   totalSteps: number;
   participants: number;
   distanceKm: number;
@@ -249,8 +250,8 @@ const BillionSteps: React.FC = () => {
           {snapshot?.status && (
             <div className="flex justify-center mb-6 sm:mb-0 sm:absolute sm:top-0 sm:right-6 lg:right-8">
               <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${snapshot.status === 'active'
-                  ? 'bg-green-50 text-green-700 border-green-200'
-                  : 'bg-red-50 text-red-700 border-red-200'
+                ? 'bg-green-50 text-green-700 border-green-200'
+                : 'bg-red-50 text-red-700 border-red-200'
                 }`}>
                 <span className={`w-2 h-2 mr-1.5 rounded-full ${snapshot.status === 'active' ? 'bg-green-500' : 'bg-red-500'
                   }`}></span>
@@ -259,7 +260,9 @@ const BillionSteps: React.FC = () => {
             </div>
           )}
 
-          <h1 className="text-xs sm:text-sm font-bold tracking-wider text-primary uppercase mb-4">A Billion Steps Campaign</h1>
+          <h1 className="text-xs sm:text-sm font-bold tracking-wider text-primary uppercase mb-4">
+            {snapshot?.campaignName ? `${snapshot.campaignName} Campaign` : "Health Campaign"}
+          </h1>
           <div className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-black text-gray-900 tracking-tighter mb-8 tabular-nums">
             {snapshot ? <AnimatedCounter value={snapshot.totalSteps} /> : "..."}
           </div>
@@ -382,7 +385,7 @@ const BillionSteps: React.FC = () => {
             <ul className="space-y-4">
               <li className="flex items-start">
                 <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs mt-0.5">1</div>
-                <p className="ml-3 text-sm text-gray-600">Join the campaign through the Kulawise mobile app.</p>
+                <p className="ml-3 text-sm text-gray-600">Join the campaign by downloading and signing up on the kulawise mobile app.</p>
               </li>
               <li className="flex items-start">
                 <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs mt-0.5">2</div>
@@ -578,7 +581,7 @@ const BillionSteps: React.FC = () => {
                   <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Total Steps</div>
                   <div className="text-3xl font-black text-gray-900 tabular-nums">{searchResult.steps.toLocaleString()}</div>
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-gray-50 rounded-2xl p-4 text-center border border-gray-100">
                     <div className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Contribution</div>

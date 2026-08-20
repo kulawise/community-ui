@@ -23,7 +23,7 @@ export default function B2BCallouts() {
               </div>
             )}
             <div className="relative z-10 space-y-4">
-              <h3 className="font-headline-lg text-headline-lg">
+              <h3 className="font-headline-lg text-2xl sm:text-headline-lg">
                 {item.title}
               </h3>
               <p

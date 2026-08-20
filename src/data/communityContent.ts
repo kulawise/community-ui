@@ -6,10 +6,7 @@ export type NavLink = { label: string; href: string };
 
 export const NAV_LINKS: NavLink[] = [
   { label: "Home", href: "/" },
-  { label: "1B Steps", href: "/1b-steps" },
   { label: "Impact", href: "/impact" },
-  // { label: "Stories", href: "/#stories" },
-  // { label: "Partners", href: "/#partners" },
 ];
 
 export const LIVE_IMPACT_STATS = [

@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
 import Impact from "./pages/Impact";
 import HealthBingo from "./pages/HealthBingo";
 import BillionSteps from "./pages/events/BillionSteps";
@@ -7,10 +6,9 @@ import BillionSteps from "./pages/events/BillionSteps";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<BillionSteps />} />
       <Route path="/impact" element={<Impact />} />
       <Route path="/2025-bingo" element={<HealthBingo />} />
-      <Route path="/1b-steps" element={<BillionSteps />} />
     </Routes>
   );
 }

@@ -1,5 +1,6 @@
 import Navbar from "../components/community/Navbar";
 import CommunityFooter from "../components/community/CommunityFooter";
+import B2BCallouts from "../components/community/B2BCallouts";
 import {
   SDG_DETAIL_CARDS,
   IMPACT_METHODOLOGY,
@@ -21,7 +22,7 @@ export default function Impact() {
               Global Impact Framework
             </span>
           </div>
-          <h1 className="font-headline-xl text-headline-xl lg:text-[64px] leading-tight mb-8">
+          <h1 className="font-headline-xl text-4xl sm:text-5xl lg:text-[64px] leading-tight mb-8">
             Our Sustainable Development
             <br className="hidden lg:block" /> Goals Commitments
           </h1>
@@ -52,7 +53,7 @@ export default function Impact() {
                     >
                       {goal3.goal}
                     </div>
-                    <h3 className="font-headline-md text-headline-md">
+                    <h3 className="font-headline-md text-xl sm:text-headline-md">
                       {goal3.title}
                     </h3>
                   </div>
@@ -100,7 +101,7 @@ export default function Impact() {
                 >
                   {goal1.goal}
                 </div>
-                <h3 className="font-headline-md text-headline-md mb-4">
+                <h3 className="font-headline-md text-xl sm:text-headline-md mb-4">
                   {goal1.title}
                 </h3>
                 <p className="font-body-md opacity-90 leading-snug mb-8 italic">
@@ -131,7 +132,7 @@ export default function Impact() {
                   >
                     {goal12.goal}
                   </div>
-                  <h3 className="font-headline-md text-headline-md">
+                  <h3 className="font-headline-md text-xl sm:text-headline-md">
                     {goal12.title}
                   </h3>
                 </div>
@@ -165,13 +166,13 @@ export default function Impact() {
                   {goal17.goal}
                 </div>
               </div>
-              <h3 className="font-headline-md text-headline-md mb-2">
+              <h3 className="font-headline-md text-xl sm:text-headline-md mb-2">
                 {goal17.title}
               </h3>
               <p className="font-body-lg text-sdg-partnerships font-bold mb-6">
                 Target: {goal17.target}
               </p>
-              <div className="grid grid-cols-2 gap-4 mt-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-auto">
                 <div className="bg-surface p-4 rounded-lg">
                   <span className="material-symbols-outlined text-sdg-partnerships mb-2 block">
                     account_balance_wallet
@@ -200,7 +201,7 @@ export default function Impact() {
 
         <section className="bg-on-surface text-surface py-24 px-gutter relative overflow-hidden">
           <div className="max-w-container-max mx-auto relative z-10">
-            <h2 className="font-headline-lg text-headline-lg mb-6">
+            <h2 className="font-headline-lg text-2xl sm:text-headline-lg mb-6">
               Impact Methodology
             </h2>
             <p className="font-body-lg text-surface/80 leading-relaxed mb-8 max-w-2xl">
@@ -217,7 +218,7 @@ export default function Impact() {
                     </span>
                   </div>
                   <div>
-                    <h4 className="font-headline-md text-headline-md mb-2">
+                    <h4 className="font-headline-md text-xl sm:text-headline-md mb-2">
                       {item.title}
                     </h4>
                     <p className="font-body-md text-surface/60">
@@ -230,8 +231,10 @@ export default function Impact() {
           </div>
         </section>
 
+        <B2BCallouts />
+
         <section className="py-32 text-center px-gutter max-w-container-max mx-auto">
-          <h2 className="font-headline-xl text-headline-xl mb-6">
+          <h2 className="font-headline-xl text-3xl sm:text-headline-xl mb-6">
             Ready to make a difference?
           </h2>
           <p className="font-body-lg text-on-surface-variant max-w-xl mx-auto mb-12">

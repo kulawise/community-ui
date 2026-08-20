@@ -363,7 +363,8 @@ const BillionSteps: React.FC = () => {
             <h3 className="text-lg font-bold text-gray-900 mb-4">Your Contribution</h3>
             <form onSubmit={handleSearch} className="relative">
               <input
-                type="text"
+                type="search"
+                enterKeyHint="search"
                 value={searchUsername}
                 onChange={(e) => setSearchUsername(e.target.value)}
                 placeholder="Search your username (e.g. otobong)"
@@ -449,10 +450,59 @@ const BillionSteps: React.FC = () => {
                         </td>
                       </tr>
                     ))}
-                    {snapshot && currentTab !== 'users' && (
+                    {snapshot && currentTab === 'circles' && snapshot.topCircles?.map((circle) => (
+                      <tr key={circle.circle_id} className="hover:bg-gray-50 transition-colors">
+                        <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+                          #{circle.rank}
+                        </td>
+                        <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <div className="flex-shrink-0 h-8 w-8">
+                              <img className="h-8 w-8 rounded-full" src={circle.circle_image || `https://ui-avatars.com/api/?name=${circle.circle_title}`} alt="" />
+                            </div>
+                            <div className="ml-4">
+                              <div className="text-sm font-medium text-gray-900">{circle.circle_title}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-bold text-primary tabular-nums">
+                          {circle.steps.toLocaleString()}
+                        </td>
+                      </tr>
+                    ))}
+                    {snapshot && currentTab === 'circles' && (!snapshot.topCircles || snapshot.topCircles.length === 0) && (
                       <tr>
                         <td colSpan={3} className="px-4 sm:px-6 py-12 text-center text-sm text-gray-500">
-                          Data for {currentTab} coming soon.
+                          No circles recorded steps yet.
+                        </td>
+                      </tr>
+                    )}
+
+                    {snapshot && currentTab === 'champions' && snapshot.champions?.map((champion) => (
+                      <tr key={champion.user_id} className="hover:bg-gray-50 transition-colors">
+                        <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+                          #{champion.rank}
+                        </td>
+                        <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <div className="flex-shrink-0 h-8 w-8">
+                              <img className="h-8 w-8 rounded-full" src={champion.avatar || `https://ui-avatars.com/api/?name=${champion.username || 'User'}`} alt="" />
+                            </div>
+                            <div className="ml-4">
+                              <div className="text-sm font-medium text-gray-900">{champion.username || 'Anonymous User'}</div>
+                              <div className="text-xs text-gray-500">{champion.username ? `@${champion.username}` : ""}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-bold text-primary tabular-nums">
+                          {champion.referrals.toLocaleString()}
+                        </td>
+                      </tr>
+                    ))}
+                    {snapshot && currentTab === 'champions' && (!snapshot.champions || snapshot.champions.length === 0) && (
+                      <tr>
+                        <td colSpan={3} className="px-4 sm:px-6 py-12 text-center text-sm text-gray-500">
+                          No referrals recorded yet during this campaign.
                         </td>
                       </tr>
                     )}

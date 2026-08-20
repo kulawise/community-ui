@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { NAV_LINKS } from "../../data/communityContent";
+import { useDownloadModal } from "../../context/DownloadModalContext";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { pathname } = useLocation();
+  const { openDownloadModal } = useDownloadModal();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -43,12 +45,12 @@ export default function Navbar() {
         </div>
         
         <div className="flex items-center space-x-4">
-          <a
-            href="https://kulawise.com"
+          <button
+            onClick={openDownloadModal}
             className="hidden sm:inline-block bg-primary text-on-primary px-4 py-2 text-sm sm:px-6 sm:py-2.5 sm:text-base rounded-full font-label-bold active:scale-95 transition-all"
           >
             Download App
-          </a>
+          </button>
 
           {/* Mobile menu button */}
           <button
@@ -83,12 +85,15 @@ export default function Navbar() {
             </Link>
           ))}
           <div className="pt-4 mt-2 border-t border-outline-variant/30">
-            <a
-              href="https://kulawise.com"
+            <button
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                openDownloadModal();
+              }}
               className="sm:hidden block w-full text-center bg-primary text-on-primary px-4 py-3 rounded-full font-label-bold active:scale-95 transition-all"
             >
               Download App
-            </a>
+            </button>
           </div>
         </div>
       )}

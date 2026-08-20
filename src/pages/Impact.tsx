@@ -5,10 +5,12 @@ import {
   SDG_DETAIL_CARDS,
   IMPACT_METHODOLOGY,
 } from "../data/communityContent";
+import { useDownloadModal } from "../context/DownloadModalContext";
 
 const [goal3, goal1, goal12, goal17] = SDG_DETAIL_CARDS;
 
 export default function Impact() {
+  const { openDownloadModal } = useDownloadModal();
   return (
     <div className="min-h-screen bg-surface font-body-md text-on-surface">
       <Navbar />
@@ -241,12 +243,12 @@ export default function Impact() {
             Your daily habits add up. Join our community and start your
             journey toward personal and community wellness today.
           </p>
-          <a
-            href="https://kulawise.com"
+          <button
+            onClick={openDownloadModal}
             className="bg-primary text-on-primary px-10 py-5 rounded-full font-headline-md hover:shadow-xl transition-all hover:-translate-y-1 inline-block"
           >
             Join the Impact
-          </a>
+          </button>
         </section>
       </main>
       <CommunityFooter />

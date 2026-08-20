@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from "../../components/community/Navbar";
 import CommunityFooter from "../../components/community/CommunityFooter";
+import { useDownloadModal } from "../../context/DownloadModalContext";
 
 interface LeaderboardEntry {
   user_id: string;
@@ -99,6 +100,7 @@ const AnimatedCounter: React.FC<{ value: number; duration?: number }> = ({ value
 };
 
 const BillionSteps: React.FC = () => {
+  const { openDownloadModal } = useDownloadModal();
   const [currentTab, setCurrentTab] = useState<'users' | 'circles' | 'champions'>('users');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -385,7 +387,17 @@ const BillionSteps: React.FC = () => {
             <ul className="space-y-4">
               <li className="flex items-start">
                 <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs mt-0.5">1</div>
-                <p className="ml-3 text-sm text-gray-600">Join the campaign by downloading and signing up on the kulawise mobile app.</p>
+                <p className="ml-3 text-sm text-gray-600">
+                  Join the campaign by{" "}
+                  <button
+                    type="button"
+                    onClick={openDownloadModal}
+                    className="text-primary hover:underline font-semibold focus:outline-none"
+                  >
+                    downloading
+                  </button>{" "}
+                  and signing up on the kulawise mobile app.
+                </p>
               </li>
               <li className="flex items-start">
                 <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs mt-0.5">2</div>

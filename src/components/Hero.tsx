@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import { useDownloadModal } from "../context/DownloadModalContext";
 
 export default function Hero() {
+  const { openDownloadModal } = useDownloadModal();
+
   return (
     <section className="relative min-h-[85vh] flex items-center overflow-hidden bg-surface-container-low px-gutter py-20">
       <div className="max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
@@ -16,12 +19,12 @@ export default function Hero() {
             you consistent.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <a
-              href="https://kulawise.com/#app-stores"
+            <button
+              onClick={openDownloadModal}
               className="bg-primary text-on-primary px-8 py-4 rounded-lg font-headline-md text-body-md hover:opacity-90 transition-opacity active:scale-95 text-center inline-block"
             >
               Download App
-            </a>
+            </button>
             <Link
               to="/impact"
               className="border-2 border-primary text-primary px-8 py-4 rounded-lg font-headline-md text-body-md hover:bg-primary/5 transition-colors text-center"
@@ -45,3 +48,4 @@ export default function Hero() {
     </section>
   );
 }
+

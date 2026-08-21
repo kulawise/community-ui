@@ -415,7 +415,7 @@ const BillionSteps: React.FC = () => {
               <div className="border-b border-gray-200 overflow-x-auto">
                 <nav className="flex -mb-px px-4 sm:px-6 whitespace-nowrap min-w-max" aria-label="Tabs">
                   <button onClick={() => setCurrentTab('users')} className={`py-4 px-4 font-medium text-sm border-b-2 transition-colors ${currentTab === 'users' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
-                    Top 50 Users
+                    Top 50 Participants
                   </button>
                   <button onClick={() => setCurrentTab('circles')} className={`py-4 px-4 font-medium text-sm border-b-2 transition-colors ${currentTab === 'circles' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
                     Top Circles
@@ -431,7 +431,7 @@ const BillionSteps: React.FC = () => {
                   <thead className="bg-gray-50">
                     <tr>
                       <th scope="col" className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-16">Rank</th>
-                      <th scope="col" className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{currentTab === 'users' ? 'User' : currentTab === 'circles' ? 'Circle' : 'User'}</th>
+                      <th scope="col" className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{currentTab === 'users' ? 'Participant' : currentTab === 'circles' ? 'Circle' : 'Participant'}</th>
                       <th scope="col" className="px-4 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{currentTab === 'champions' ? 'Referrals' : 'Steps'}</th>
                     </tr>
                   </thead>

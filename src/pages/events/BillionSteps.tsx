@@ -8,7 +8,6 @@ interface LeaderboardEntry {
   user_id: string;
   username: string;
   first_name: string;
-  last_name: string;
   avatar: string;
   steps: number;
   rank: number;

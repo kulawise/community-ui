@@ -452,11 +452,11 @@ const BillionSteps: React.FC = () => {
                         <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <div className="flex-shrink-0 h-8 w-8">
-                              <img className="h-8 w-8 rounded-full" src={user.avatar || `https://ui-avatars.com/api/?name=${user.first_name}`} alt="" />
+                              <img className="h-8 w-8 rounded-full" src={user.avatar || `https://ui-avatars.com/api/?name=${user.first_name || 'User'}`} alt="" />
                             </div>
                             <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900">{user.username || 'Anonymous User'}</div>
-                              <div className="text-xs text-gray-500">{user.username ? `@${user.username}` : ""}</div>
+                              <div className="text-sm font-medium text-gray-900">{user.username || user.first_name || 'Anonymous User'}</div>
+                              <div className="text-xs text-gray-500">{user.username ? `@${user.username}` : "(username not set)"}</div>
                             </div>
                           </div>
                         </td>
@@ -518,11 +518,11 @@ const BillionSteps: React.FC = () => {
                         <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <div className="flex-shrink-0 h-8 w-8">
-                              <img className="h-8 w-8 rounded-full" src={champion.avatar || `https://ui-avatars.com/api/?name=${champion.username || 'User'}`} alt="" />
+                              <img className="h-8 w-8 rounded-full" src={champion.avatar || `https://ui-avatars.com/api/?name=${champion.first_name || 'User'}`} alt="" />
                             </div>
                             <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900">{champion.username || 'Anonymous User'}</div>
-                              <div className="text-xs text-gray-500">{champion.username ? `@${champion.username}` : ""}</div>
+                              <div className="text-sm font-medium text-gray-900">{champion.username || champion.first_name || 'Anonymous User'}</div>
+                              <div className="text-xs text-gray-500">{champion.username ? `@${champion.username}` : "(username not set)"}</div>
                             </div>
                           </div>
                         </td>
@@ -577,7 +577,7 @@ const BillionSteps: React.FC = () => {
                 </button>
                 <div className="inline-block relative">
                   <img
-                    src={searchResult.avatar || `https://ui-avatars.com/api/?name=${searchResult.username || 'User'}`}
+                    src={searchResult.avatar || `https://ui-avatars.com/api/?name=${searchResult.first_name || 'User'}`}
                     alt="Avatar"
                     className="w-24 h-24 rounded-full border-4 border-white/20 shadow-lg object-cover"
                   />
@@ -585,8 +585,8 @@ const BillionSteps: React.FC = () => {
                     #{searchResult.rank}
                   </div>
                 </div>
-                <h3 className="text-xl font-bold text-white mt-4">{searchResult.username || 'Anonymous User'}</h3>
-                <p className="text-primary-100 font-medium">{searchResult.username ? `@${searchResult.username}` : ""}</p>
+                <h3 className="text-xl font-bold text-white mt-4">{searchResult.username || searchResult.first_name || 'Anonymous User'}</h3>
+                <p className="text-primary-100 font-medium">{searchResult.username ? `@${searchResult.username}` : "(username not set)"}</p>
               </div>
               <div className="p-6 bg-white flex flex-col gap-4">
                 <div className="bg-gray-50 rounded-2xl p-4 text-center border border-gray-100">

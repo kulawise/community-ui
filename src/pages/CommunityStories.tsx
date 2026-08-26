@@ -42,31 +42,23 @@ export default function CommunityStories() {
                   <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-on-surface leading-tight mt-1">
                     {storyData.title}
                   </h1>
-                  <p className="text-primary font-medium text-xs sm:text-sm mt-2 sm:mt-3 flex items-center gap-2">
+                  <div className="text-primary font-medium text-xs sm:text-sm mt-2 sm:mt-3 flex flex-wrap items-center gap-x-2 gap-y-1">
                     <span>By Kulawise</span>
                     {isIfeoma && IFEOMA_STORY.instagram && (
                       <>
-                        <span>•</span>
+                        <span className="text-gray-300">•</span>
                         <a
                           href={`https://instagram.com/${IFEOMA_STORY.instagram.replace('@', '')}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="hover:underline font-bold text-emerald-700 inline-flex items-center gap-1"
+                          className="hover:underline font-bold text-emerald-700 inline-block"
                         >
                           {IFEOMA_STORY.instagram}
-                          <span className="material-symbols-outlined text-xs">open_in_new</span>
                         </a>
                       </>
                     )}
-                  </p>
+                  </div>
                 </div>
-              </div>
-
-              {/* Subtitle / Intro banner */}
-              <div className="bg-emerald-950 text-emerald-100 p-5 sm:p-8 rounded-2xl border-l-4 border-emerald-400">
-                <p className="italic text-base sm:text-lg font-light leading-relaxed">
-                  "{storyData.subtitle}"
-                </p>
               </div>
 
               {/* Q&A Sections */}
@@ -117,7 +109,7 @@ export default function CommunityStories() {
                 <p className="text-base sm:text-lg md:text-xl font-light leading-relaxed italic whitespace-pre-line">
                   {storyData.closing}
                 </p>
-                <div className="pt-3 sm:pt-4 border-t border-emerald-800/60 flex items-center justify-between">
+                <div className="pt-3 sm:pt-4 border-t border-emerald-800/60 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div>
                     <p className="font-bold text-white text-sm sm:text-base">{storyData.name}</p>
                     <p className="text-xs text-emerald-300">{storyData.role}</p>
@@ -127,10 +119,9 @@ export default function CommunityStories() {
                       href={`https://instagram.com/${IFEOMA_STORY.instagram.replace('@', '')}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs text-emerald-200 hover:text-white border border-emerald-700/60 hover:bg-emerald-800/50 px-3 py-1.5 rounded-full transition-all inline-flex items-center gap-1 font-semibold"
+                      className="text-xs text-emerald-200 hover:text-white border border-emerald-700/60 hover:bg-emerald-800/50 px-3 py-1.5 rounded-full transition-all inline-block w-fit font-semibold"
                     >
                       {IFEOMA_STORY.instagram}
-                      <span className="material-symbols-outlined text-[13px]">open_in_new</span>
                     </a>
                   )}
                 </div>

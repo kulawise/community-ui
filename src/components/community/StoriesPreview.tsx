@@ -1,12 +1,6 @@
 import { STORY_CARDS } from "../../data/communityContent";
 
-interface StoriesPreviewProps {
-  onShareStoryClick: () => void;
-}
-
-export default function StoriesPreview({
-  onShareStoryClick,
-}: StoriesPreviewProps) {
+export default function StoriesPreview() {
   return (
     <section
       id="stories"
@@ -62,12 +56,12 @@ export default function StoriesPreview({
         ))}
       </div>
       <div className="text-center mt-10">
-        <button
-          onClick={onShareStoryClick}
+        <a
+          href="mailto:hello@kulawise.com?subject=My%20Kulawise%20Community%20Story"
           className="text-on-surface-variant font-body-md hover:text-primary transition-colors underline"
         >
-          Have a story of your own? Share it here.
-        </button>
+          Have a story of your own? Send an email to hello@kulawise.com
+        </a>
       </div>
     </section>
   );

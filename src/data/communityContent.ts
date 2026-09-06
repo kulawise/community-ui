@@ -85,6 +85,25 @@ export type StoryCard = {
 
 export const STORY_CARDS: StoryCard[] = [
   {
+    id: "emmanuel-amah-evaready",
+    category: "Footballer & Consistency",
+    categoryColorClass: "text-primary",
+    icon: "sports_soccer",
+    title: "Consistency Isn't Motivation, It's Showing Up: Meet Evaready",
+    subtitle: "Some days motivation isn't there. You put on your headset, play your music, and walk anyway.",
+    description:
+      "How losing a loved one to diabetes turned Emmanuel \u201CEvaready\u201D Amah into a 20,000-steps-a-day walker chasing the top of the leaderboard.",
+    image: "/images/kulawise-community-story-evaready-the-consistency.jpg",
+    slug: "emmanuel-amah-evaready",
+    date: "September 2026",
+    readTime: "4 min read",
+    author: "Emmanuel Amah",
+    role: "Footballer",
+    posters: [
+      "/images/kulawise-community-story-evaready-the-consistency.jpg",
+    ],
+  },
+  {
     id: "ifeoma-arua",
     category: "Runner & Discipline",
     categoryColorClass: "text-primary",
@@ -234,6 +253,54 @@ And I think that’s the beautiful part of the journey, sometimes you start movi
 
 Onward,
 Ifeoma Arua`
+};
+
+export const EVAREADY_STORY = {
+  id: "emmanuel-amah-evaready",
+  name: "Emmanuel Amah (Evaready)",
+  role: "Footballer",
+  title: "Consistency Isn't Motivation, It's Showing Up",
+  subtitle: "Some days motivation isn't there. You put on your headset, play your music, and walk anyway.",
+  date: "September 2026",
+  readTime: "4 min read",
+  posters: [
+    "/images/kulawise-community-story-evaready-the-consistency.jpg",
+  ],
+  questions: [
+    {
+      q: "1. Tell us a little about yourself.",
+      a: `My name is Emmanuel Amah, but I prefer to be called Evaready.
+
+I\u2019m a footballer, so fitness is an important part of my life. I\u2019d describe myself as ambitious, creative and resilient \u2014 someone who loves football, music, and staying active.
+
+I enjoy challenging myself, staying consistent, and finding ways to get better both physically and mentally.`
+    },
+    {
+      q: "2. What got you started on your health and fitness journey?",
+      a: `Losing a loved one to diabetes made me realise how important it is to stay active and healthy.
+
+I also don\u2019t like how my body functions when I\u2019m not fit. When I\u2019m fit, I think faster, I feel more energetic, and I become more creative. And as a footballer, staying fit helps me perform better and feel more confident.`
+    },
+    {
+      q: "3. What keeps you consistent?",
+      a: `What keeps me consistent is how much better I feel when I stay active.
+
+Walking with my headset on and listening to music helps me clear my mind, distract myself from worrying, and gives me time to reset. I have more energy, I think more clearly, and I feel more productive when I\u2019m active.
+
+Even on days I don\u2019t feel like it, I remind myself that consistency is about discipline, not motivation.`
+    },
+    {
+      q: "4. What does community mean to you in your health journey?",
+      a: `Community means having people around you who motivate and encourage you to keep going.
+
+Being part of the Kulawise Campaign has made my fitness journey more enjoyable, because seeing other people stay active reminds me that I\u2019m not doing it alone.
+
+And honestly, I also want to beat Ifeoma and take the top spot on the leaderboard. That little competition keeps me motivated to stay consistent and keep moving.`
+    }
+  ],
+  closing: `Some days, motivation isn\u2019t there. So you put on your headset, play your music, take that walk, and remind yourself: consistency isn\u2019t about always feeling motivated. It\u2019s about showing up.
+
+Evaready`
 };
 
 export const B2B_CALLOUTS = [

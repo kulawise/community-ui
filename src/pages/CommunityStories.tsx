@@ -2,21 +2,33 @@ import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Navbar from "../components/community/Navbar";
 import CommunityFooter from "../components/community/CommunityFooter";
-import { STORY_CARDS, IFEOMA_STORY, DIETITIAN_STORY } from "../data/communityContent";
+import { STORY_CARDS, IFEOMA_STORY, DIETITIAN_STORY, EVAREADY_STORY } from "../data/communityContent";
+
+// Slug -> full story. A registry rather than a chain of slug comparisons: the
+// page previously hardcoded "is this Ifeoma?" in five places, so a third story
+// meant a third branch in each of them. Adding one is now a single line here.
+const FULL_STORIES: Record<string, typeof IFEOMA_STORY | typeof DIETITIAN_STORY | typeof EVAREADY_STORY> = {
+  "ifeoma-arua": IFEOMA_STORY,
+  "lagos-dietitian-women-wellness": DIETITIAN_STORY,
+  "emmanuel-amah-evaready": EVAREADY_STORY,
+};
 
 export default function CommunityStories() {
   const { slug } = useParams<{ slug?: string }>();
   const [selectedPoster, setSelectedPoster] = useState<string | null>(null);
 
   // Match active story object
-  const activeStory = slug === "lagos-dietitian-women-wellness" 
-    ? DIETITIAN_STORY 
-    : (slug === "ifeoma-arua" ? IFEOMA_STORY : (slug ? STORY_CARDS.find((s) => s.slug === slug) : null));
+  const activeStory = slug
+    ? (FULL_STORIES[slug] ?? STORY_CARDS.find((s) => s.slug === slug) ?? null)
+    : null;
 
   // Single Story Detail View
   if (activeStory) {
-    const isIfeoma = activeStory.id === "ifeoma-arua";
-    const storyData = isIfeoma ? IFEOMA_STORY : DIETITIAN_STORY;
+    const storyData = FULL_STORIES[activeStory.id] ?? DIETITIAN_STORY;
+    // Optional extras, present on some stories and not others. Read off the
+    // story itself rather than asking "which person is this".
+    const instagram = "instagram" in storyData ? storyData.instagram : undefined;
+    const posters = "posters" in storyData ? storyData.posters : undefined;
 
     return (
       <div className="min-h-screen bg-surface font-body-md text-on-surface">
@@ -44,16 +56,16 @@ export default function CommunityStories() {
                   </h1>
                   <div className="text-primary font-medium text-xs sm:text-sm mt-2 sm:mt-3 flex flex-wrap items-center gap-x-2 gap-y-1">
                     <span>By Kulawise</span>
-                    {isIfeoma && IFEOMA_STORY.instagram && (
+                    {instagram && (
                       <>
                         <span className="text-gray-300">•</span>
                         <a
-                          href={`https://instagram.com/${IFEOMA_STORY.instagram.replace('@', '')}`}
+                          href={`https://instagram.com/${instagram.replace('@', '')}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="hover:underline font-bold text-emerald-700 inline-block"
                         >
-                          {IFEOMA_STORY.instagram}
+                          {instagram}
                         </a>
                       </>
                     )}
@@ -73,30 +85,27 @@ export default function CommunityStories() {
                       {item.a}
                     </div>
 
-                    {/* Insert poster graphics cleanly inside Ifeoma story */}
-                    {isIfeoma && index === 1 && IFEOMA_STORY.posters && (
-                      <div className="my-5 sm:my-8 rounded-xl sm:rounded-2xl overflow-hidden shadow-md sm:shadow-lg border border-gray-100 max-w-2xl mx-auto cursor-pointer" onClick={() => setSelectedPoster(IFEOMA_STORY.posters[1])}>
+                    {/* Poster after the second answer, when the story has one. */}
+                    {index === 1 && posters && posters[1] && (
+                      <div className="my-5 sm:my-8 rounded-xl sm:rounded-2xl overflow-hidden shadow-md sm:shadow-lg border border-gray-100 max-w-2xl mx-auto cursor-pointer" onClick={() => setSelectedPoster(posters[1])}>
                         <img
-                          src={IFEOMA_STORY.posters[1]}
-                          alt="The Beginning - Ifeoma story"
+                          src={posters[1]}
+                          alt={`${storyData.name} story poster`}
                           className="w-full h-auto object-cover hover:scale-102 transition-transform duration-300"
                         />
                       </div>
                     )}
-                    {isIfeoma && index === 2 && IFEOMA_STORY.posters && (
+                    {index === 2 && posters && posters[2] && (
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 my-5 sm:my-8">
-                        <img
-                          src={IFEOMA_STORY.posters[2]}
-                          alt="The Discipline - Ifeoma story"
-                          className="rounded-xl sm:rounded-2xl shadow-md sm:shadow-lg border border-gray-100 w-full h-auto object-cover cursor-pointer"
-                          onClick={() => setSelectedPoster(IFEOMA_STORY.posters[2])}
-                        />
-                        <img
-                          src={IFEOMA_STORY.posters[3]}
-                          alt="The Community - Ifeoma story"
-                          className="rounded-xl sm:rounded-2xl shadow-md sm:shadow-lg border border-gray-100 w-full h-auto object-cover cursor-pointer"
-                          onClick={() => setSelectedPoster(IFEOMA_STORY.posters[3])}
-                        />
+                        {posters.slice(2).map((poster) => (
+                          <img
+                            key={poster}
+                            src={poster}
+                            alt={`${storyData.name} story poster`}
+                            className="rounded-xl sm:rounded-2xl shadow-md sm:shadow-lg border border-gray-100 w-full h-auto object-cover cursor-pointer"
+                            onClick={() => setSelectedPoster(poster)}
+                          />
+                        ))}
                       </div>
                     )}
                   </div>
@@ -114,14 +123,14 @@ export default function CommunityStories() {
                     <p className="font-bold text-white text-sm sm:text-base">{storyData.name}</p>
                     <p className="text-xs text-emerald-300">{storyData.role}</p>
                   </div>
-                  {isIfeoma && IFEOMA_STORY.instagram && (
+                  {instagram && (
                     <a
-                      href={`https://instagram.com/${IFEOMA_STORY.instagram.replace('@', '')}`}
+                      href={`https://instagram.com/${instagram.replace('@', '')}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-xs text-emerald-200 hover:text-white border border-emerald-700/60 hover:bg-emerald-800/50 px-3 py-1.5 rounded-full transition-all inline-block w-fit font-semibold"
                     >
-                      {IFEOMA_STORY.instagram}
+                      {instagram}
                     </a>
                   )}
                 </div>

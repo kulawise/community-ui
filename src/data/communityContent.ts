@@ -93,14 +93,14 @@ export const STORY_CARDS: StoryCard[] = [
     subtitle: "Some days motivation isn't there. You put on your headset, play your music, and walk anyway.",
     description:
       "How losing a loved one to diabetes turned Emmanuel \u201CEvaready\u201D Amah into a 20,000-steps-a-day walker chasing the top of the leaderboard.",
-    image: "/images/kulawise-community-story-evaready-the-consistency.jpg",
+    image: "/images/amah-kulawise.jpeg",
     slug: "emmanuel-amah-evaready",
     date: "September 2026",
     readTime: "4 min read",
     author: "Emmanuel Amah",
     role: "Footballer",
     posters: [
-      "/images/kulawise-community-story-evaready-the-consistency.jpg",
+      "/images/amah-kulawise.jpeg",
     ],
   },
   {
@@ -264,7 +264,7 @@ export const EVAREADY_STORY = {
   date: "September 2026",
   readTime: "4 min read",
   posters: [
-    "/images/kulawise-community-story-evaready-the-consistency.jpg",
+    "/images/amah-kulawise.jpeg",
   ],
   questions: [
     {
